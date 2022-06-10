@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatto", "Chatto\Chatto.csproj", "{EC89E6D6-A566-4F51-8286-349C07679A86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChattoAuth", "ChattoAuth\ChattoAuth.csproj", "{2514902C-EEA1-431D-BEC1-251423D54D54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{EC89E6D6-A566-4F51-8286-349C07679A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC89E6D6-A566-4F51-8286-349C07679A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC89E6D6-A566-4F51-8286-349C07679A86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2514902C-EEA1-431D-BEC1-251423D54D54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2514902C-EEA1-431D-BEC1-251423D54D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2514902C-EEA1-431D-BEC1-251423D54D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2514902C-EEA1-431D-BEC1-251423D54D54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
