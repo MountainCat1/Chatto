@@ -34,9 +34,9 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
     /// </summary>
     /// <param name="googleJwt"></param>
     /// <returns></returns>
-    public async Task<Account> AuthenticateAsync(string googleJwt)
+    public async Task<Account> Authenticate(string googleJwt)
     {
-        var jwtPayload = await ValidateGoogleJwtAsync(googleJwt);
+        var jwtPayload = await ValidateGoogleJwt(googleJwt);
 
         var account = await _databaseContext.Accounts
             .OfType<GoogleAccount>()
@@ -50,7 +50,7 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
     /// </summary>
     /// <param name="jwt"></param>
     /// <returns></returns>
-    private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleJwtAsync(string jwt)
+    private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleJwt(string jwt)
     {
         if (jwt.Contains(' '))
             jwt = jwt.Split(' ').Last();

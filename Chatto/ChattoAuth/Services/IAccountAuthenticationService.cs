@@ -3,5 +3,5 @@ namespace ChattoAuth.Services;
 
 public interface IAccountAuthenticationService
 {
-    Task<Account> AuthenticateAsync(string googleJwt);
+    Task<Account> Authenticate(string googleJwt);
 }

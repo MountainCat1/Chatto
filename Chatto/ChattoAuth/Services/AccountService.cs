@@ -19,21 +19,21 @@ public interface IAccountService
     /// </summary>
     /// <param name="googleJwt"></param>
     /// <returns></returns>
-    Task<Account> RegisterGoogleAccountAsync(string googleJwt);
+    Task<Account> RegisterGoogleAccount(string googleJwt);
 
     /// <summary>
     /// Returns user with associated ID
     /// </summary>
     /// <param name="accountId"></param>
     /// <returns></returns>
-    Task<Account> GetAccountAsync(int accountId);
+    Task<Account> GetAccount(int accountId);
 
     /// <summary>
     /// Generates JWT containing Chatto signature and account ID 
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
-    Task<string> GetJwTAsync(Account account);
+    Task<string> GetJwT(Account account);
 
     /// <summary>
     /// Validates JWT token, if validation is successful returns account ID
@@ -74,9 +74,9 @@ public class AccountService : IAccountService
     /// </summary>
     /// <param name="googleJwt"></param>
     /// <returns></returns>
-    public async Task<Account> RegisterGoogleAccountAsync(string googleJwt)
+    public async Task<Account> RegisterGoogleAccount(string googleJwt)
     {
-        var newAccount = await _googleAuthenticationService.AuthenticateAsync(googleJwt);
+        var newAccount = await _googleAuthenticationService.Authenticate(googleJwt);
 
         await _databaseContext.Accounts.AddAsync(newAccount);
         await _databaseContext.SaveChangesAsync();
@@ -89,7 +89,7 @@ public class AccountService : IAccountService
     /// </summary>
     /// <param name="accountId"></param>
     /// <returns></returns>
-    public async Task<Account> GetAccountAsync(int accountId)
+    public async Task<Account> GetAccount(int accountId)
     {
         return await _databaseContext.Accounts.FirstAsync(x => x.Id == accountId);
     }
@@ -99,7 +99,7 @@ public class AccountService : IAccountService
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
-    public async Task<string> GetJwTAsync(Account account)
+    public async Task<string> GetJwT(Account account)
     {
         var claims = new List<Claim>()
         {
