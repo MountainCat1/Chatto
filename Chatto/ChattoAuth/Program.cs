@@ -26,12 +26,13 @@ services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
 services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy  =>
         {
-            policy.AllowAnyOrigin()//.WithOrigins(configuration.GetSection("FrontEnd:Url").Value)
+            policy.WithOrigins(configuration.GetSection("Cors:AllowedDomains").Get<string[]>())
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
