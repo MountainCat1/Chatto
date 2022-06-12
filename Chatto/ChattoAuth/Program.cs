@@ -31,7 +31,7 @@ services.AddCors(options =>
     options.AddDefaultPolicy(
         policy  =>
         {
-            policy.WithOrigins(configuration.GetSection("FrontEnd:Url").Value)
+            policy.AllowAnyOrigin()//.WithOrigins(configuration.GetSection("FrontEnd:Url").Value)
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -63,8 +63,8 @@ services
     })
     .AddJwtBearer(o =>
     {
-        //o.SecurityTokenValidators.Clear();
-        //o.SecurityTokenValidators.Add(new GoogleTokenValidator(authenticationSettings.Google.ClientId));
+        o.SecurityTokenValidators.Clear();
+        o.SecurityTokenValidators.Add(new GoogleTokenValidator(authenticationSettings.Google.ClientId));
     });
 
 // ========= RUN APP  =========
@@ -89,7 +89,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseRouting();
-app.UseAuthentication();
 app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 app.Run();

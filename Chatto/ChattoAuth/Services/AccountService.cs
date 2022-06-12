@@ -12,15 +12,6 @@ namespace ChattoAuth.Services;
 
 public interface IAccountService
 {
-
-
-    /// <summary>
-    /// Registers user via Google JWT
-    /// </summary>
-    /// <param name="googleJwt"></param>
-    /// <returns></returns>
-    Task<Account> RegisterGoogleAccount(string googleJwt);
-
     /// <summary>
     /// Returns user with associated ID
     /// </summary>
@@ -33,7 +24,7 @@ public interface IAccountService
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
-    Task<string> GetJwT(Account account);
+    Task<string> GetAccountJwt(Account account);
 
     /// <summary>
     /// Validates JWT token, if validation is successful returns account ID
@@ -70,21 +61,6 @@ public class AccountService : IAccountService
     }
 
     /// <summary>
-    /// Registers user via Google JWT
-    /// </summary>
-    /// <param name="googleJwt"></param>
-    /// <returns></returns>
-    public async Task<Account> RegisterGoogleAccount(string googleJwt)
-    {
-        var newAccount = await _googleAuthenticationService.Authenticate(googleJwt);
-
-        await _databaseContext.Accounts.AddAsync(newAccount);
-        await _databaseContext.SaveChangesAsync();
-
-        return newAccount;
-    }
-    
-    /// <summary>
     /// Returns user with associated ID
     /// </summary>
     /// <param name="accountId"></param>
@@ -99,7 +75,7 @@ public class AccountService : IAccountService
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
-    public async Task<string> GetJwT(Account account)
+    public async Task<string> GetAccountJwt(Account account)
     {
         var claims = new List<Claim>()
         {

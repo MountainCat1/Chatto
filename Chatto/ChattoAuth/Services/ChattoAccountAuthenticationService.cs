@@ -2,16 +2,25 @@
 
 namespace ChattoAuth.Services;
 
-public interface IChattoAuthenticationService : IAccountAuthenticationService
+public interface IChattoAuthenticationService : IAccountAuthenticationService<ChattoAccount, ChattoAccountData>
 {
     
 }
 
 public class ChattoAuthenticationService : IChattoAuthenticationService
 {
-    public async Task<Account> Authenticate(string googleJwt)
+    public async Task<ChattoAccount> Authenticate(HttpRequest request)
     {
-        // TODO local authentication and stuff
         throw new NotImplementedException();
     }
+
+    public async Task Register(ChattoAccountData authenticationData)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class ChattoAccountData
+{
+    public string PasswordHash { get; set; }
 }

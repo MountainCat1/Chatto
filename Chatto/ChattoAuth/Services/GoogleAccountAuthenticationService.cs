@@ -12,8 +12,14 @@ using InvalidJwtException = ChattoAuth.Exceptions.InvalidJwtException;
 
 namespace ChattoAuth.Services;
 
-public interface IGoogleAuthenticationService : IAccountAuthenticationService
+public interface IGoogleAuthenticationService : IAccountAuthenticationService<GoogleAccount, GoogleAuthenticationData>
 {
+    /// <summary>
+    /// Returns GoogleAccountData with google ID taken from google jwt
+    /// </summary>
+    /// <param name="googleJwt"></param>
+    /// <returns></returns>
+    public Task<GoogleAccount> CreateAccountEntity(string googleJwt);
 }
 
 public class GoogleAuthenticationService : IGoogleAuthenticationService
@@ -28,14 +34,24 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
         _authenticationSettings = authenticationSettings;
         _databaseContext = databaseContext;
     }
+    
+    public async Task<GoogleAccount> CreateAccountEntity(string googleJwt)
+    {
+        return new GoogleAccount()
+        {
+            GoogleId = (await ValidateGoogleJwt(googleJwt)).Subject
+        };
+    }
 
     /// <summary>
     /// Validated google JWT token and return associated account
     /// </summary>
-    /// <param name="googleJwt"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<Account> Authenticate(string googleJwt)
+    public async Task<GoogleAccount> Authenticate(HttpRequest request)
     {
+        request.Headers.TryGetValue("Authorization", out var googleJwt);
+        
         var jwtPayload = await ValidateGoogleJwt(googleJwt);
 
         var account = await _databaseContext.Accounts
@@ -44,7 +60,20 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
 
         return account;
     }
-    
+
+    public async Task Register(GoogleAuthenticationData authenticationData)
+    {
+        var googleId = (await ValidateGoogleJwt(authenticationData.Jwt)).Subject;
+
+        var newAccount = new GoogleAccount()
+        {
+            GoogleId = googleId
+        };
+
+        await _databaseContext.Accounts.AddAsync(newAccount);
+        await _databaseContext.SaveChangesAsync();
+    }
+
     /// <summary>
     /// Validates google JWT and its return payload
     /// </summary>
@@ -71,4 +100,9 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
             throw;
         }
     }
+}
+
+public class GoogleAuthenticationData
+{
+    public string Jwt { get; set; }
 }

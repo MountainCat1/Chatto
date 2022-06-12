@@ -37,7 +37,7 @@ function callApiRegister(jwt: string) {
         headers: { 'Authorization': `Bearer ${jwt}` },
     };
 
-    fetch('https://localhost:7080/api/Account/RegisterGoogle', requestOptions)
+    fetch('https://localhost:8001/api/Account/RegisterGoogle', requestOptions)
         .then(response => response.json())
         .then(json => {
             console.log('Login response: ', json)
@@ -54,7 +54,7 @@ function callApiLogin(jwt: string) {
          },
     };
 
-    fetch('https://localhost:7080/api/Account/LoginGoogle', requestOptions)
+    fetch('https://localhost:8001/api/Account/LoginGoogle', requestOptions)
         .then(response => response.json())
         .then(json => {
             console.log('Login response: ', json)
