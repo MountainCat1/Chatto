@@ -9,12 +9,12 @@ public interface IChattoAuthenticationService : IAccountAuthenticationService<Ch
 
 public class ChattoAuthenticationService : IChattoAuthenticationService
 {
-    public async Task<ChattoAccount> Authenticate(HttpRequest request)
+    public async Task<ChattoAccount> AuthenticateAsync(HttpRequest request)
     {
         throw new NotImplementedException();
     }
 
-    public async Task Register(ChattoAccountData authenticationData)
+    public async Task RegisterAsync(ChattoAccountData authenticationData)
     {
         throw new NotImplementedException();
     }

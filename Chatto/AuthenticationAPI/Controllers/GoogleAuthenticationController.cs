@@ -24,7 +24,7 @@ public class GoogleAuthenticationController : Controller
     public async Task<IActionResult> RegisterGoogle()
     {
         Request.Headers.TryGetValue("Authorization", out var googleJwt);
-        await _googleAuthenticationService.Register(new GoogleAuthenticationData()
+        await _googleAuthenticationService.RegisterAsync(new GoogleAuthenticationData()
         {
             Jwt = googleJwt
         });
@@ -36,9 +36,9 @@ public class GoogleAuthenticationController : Controller
     [Route("LoginGoogle")]
     public async Task<IActionResult> LoginGoogle()
     {
-        var account = await _googleAuthenticationService.Authenticate(Request);
+        var account = await _googleAuthenticationService.AuthenticateAsync(Request);
         
-        var jwt = await _accountService.GetAccountJwt(account);
+        var jwt = await _accountService.GetAccountJwtAsync(account);
         
         return Ok(new
         {

@@ -8,7 +8,7 @@ public interface IAccountAuthenticationService<TAccount, in TAuthenticationData>
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    Task<TAccount> Authenticate(HttpRequest request);
+    Task<TAccount> AuthenticateAsync(HttpRequest request);
 
-    Task Register(TAuthenticationData authenticationData);
+    Task RegisterAsync(TAuthenticationData authenticationData);
 }

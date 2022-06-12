@@ -19,7 +19,7 @@ public interface IGoogleAuthenticationService : IAccountAuthenticationService<Go
     /// </summary>
     /// <param name="googleJwt"></param>
     /// <returns></returns>
-    public Task<GoogleAccount> CreateAccountEntity(string googleJwt);
+    public Task<GoogleAccount> CreateAccountEntityAsync(string googleJwt);
 }
 
 public class GoogleAuthenticationService : IGoogleAuthenticationService
@@ -35,7 +35,7 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
         _databaseContext = databaseContext;
     }
     
-    public async Task<GoogleAccount> CreateAccountEntity(string googleJwt)
+    public async Task<GoogleAccount> CreateAccountEntityAsync(string googleJwt)
     {
         return new GoogleAccount()
         {
@@ -48,7 +48,7 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<GoogleAccount> Authenticate(HttpRequest request)
+    public async Task<GoogleAccount> AuthenticateAsync(HttpRequest request)
     {
         request.Headers.TryGetValue("Authorization", out var googleJwt);
         
@@ -61,7 +61,7 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
         return account;
     }
 
-    public async Task Register(GoogleAuthenticationData authenticationData)
+    public async Task RegisterAsync(GoogleAuthenticationData authenticationData)
     {
         var googleId = (await ValidateGoogleJwt(authenticationData.Jwt)).Subject;
 

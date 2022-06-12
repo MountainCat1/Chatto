@@ -17,14 +17,14 @@ public interface IAccountService
     /// </summary>
     /// <param name="accountId"></param>
     /// <returns></returns>
-    Task<Account> GetAccount(int accountId);
+    Task<Account> GetAccountAsync(int accountId);
 
     /// <summary>
     /// Generates JWT containing Chatto signature and account ID 
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
-    Task<string> GetAccountJwt(Account account);
+    Task<string> GetAccountJwtAsync(Account account);
 
     /// <summary>
     /// Validates JWT token, if validation is successful returns account ID
@@ -65,7 +65,7 @@ public class AccountService : IAccountService
     /// </summary>
     /// <param name="accountId"></param>
     /// <returns></returns>
-    public async Task<Account> GetAccount(int accountId)
+    public async Task<Account> GetAccountAsync(int accountId)
     {
         return await _databaseContext.Accounts.FirstAsync(x => x.Id == accountId);
     }
@@ -75,7 +75,7 @@ public class AccountService : IAccountService
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
-    public async Task<string> GetAccountJwt(Account account)
+    public async Task<string> GetAccountJwtAsync(Account account)
     {
         var claims = new List<Claim>()
         {
