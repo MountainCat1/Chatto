@@ -1,6 +1,8 @@
-﻿using Chatto.Models;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Chatto.Models;
 using Chatto.Services;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace Chatto.Controllers;
 
@@ -25,9 +27,10 @@ public class UserController : Controller
     
     [HttpGet]
     [Route("RegisterGoogle")]
-    public async Task<IActionResult> RegisterGoogle()
+    public async Task<IActionResult> RegisterGoogle([FromBody] GoogleRegisterModel registerModel)
     {
-        var token = await _userService.RegisterUserGoogle(Request);
-        return Ok(token);
+        var tokenString = await _userService.RegisterUserGoogle(registerModel);
+        
+        return Ok(tokenString);
     }
 }

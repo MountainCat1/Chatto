@@ -1,5 +1,5 @@
 ﻿
-using ChattoAuth.Infrastructure;
+namespace ChattoAuth.Infrastructure;
 
 public class DatabaseSeeder
 {
@@ -16,6 +16,7 @@ public class DatabaseSeeder
         {
             _databaseContext.Database.EnsureDeleted();
         }
+
         _databaseContext.Database.EnsureCreated();
         
         _databaseContext.SaveChanges();

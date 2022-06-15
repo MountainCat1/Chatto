@@ -65,10 +65,10 @@ services
         googleOptions.ClientId = authenticationSettings.Google.ClientId;
         googleOptions.ClientSecret = authenticationSettings.Google.ClientSecret;
     })
-    .AddJwtBearer(o =>
+    .AddJwtBearer(jwtBearerOptions =>
     {
-        o.SecurityTokenValidators.Clear();
-        o.SecurityTokenValidators.Add(new GoogleTokenValidator(authenticationSettings.Google.ClientId));
+        jwtBearerOptions.SecurityTokenValidators.Clear();
+        jwtBearerOptions.SecurityTokenValidators.Add(new GoogleTokenValidator(authenticationSettings.Google.ClientId));
     });
 
 // ========= RUN APP  =========
