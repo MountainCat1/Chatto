@@ -35,6 +35,22 @@ public class AuthenticationClient : IAuthenticationClient
             BaseAddress = new Uri(microservicesSettings.AuthenticationSettings.Url)
         };
     }
+    
+    public async Task<string> RegisterUserChatto(string username, string hashedPassword)
+    {
+        var httpMessage = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(RegisterChattoApiUrl, UriKind.Relative),
+            Content = new StringContent(JsonSerializer.Serialize(new { username, hashedPassword }))
+        };
+        var response = await _httpClient.SendAsync(httpMessage);
+        using (var reader = new StreamReader(await response.Content.ReadAsStreamAsync(), Encoding.UTF8))
+        {
+            return await reader.ReadToEndAsync();
+        }
+    }
+    
     public async Task<string> LoginUserChatto(string username, string hashedPassword)
     {
         var httpMessage = new HttpRequestMessage()
@@ -49,27 +65,12 @@ public class AuthenticationClient : IAuthenticationClient
             return await reader.ReadToEndAsync();
         }
     }
-    
-    public async Task<string> RegisterUserChatto(string username, string hashedPassword)
-    {
-        var httpMessage = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(RegisterChattoApiUrl, UriKind.Relative),
-            Content = new StringContent(JsonSerializer.Serialize(new { username, hashedPassword }))
-        };
-        var response = await _httpClient.SendAsync(httpMessage);
-        using (var reader = new StreamReader(await response.Content.ReadAsStreamAsync(), Encoding.UTF8))
-        {
-            return await reader.ReadToEndAsync();
-        }
-    }
 
     public async Task<string> RegisterUserGoogle(string googleToken)
     {
         var httpMessage = new HttpRequestMessage()
         {
-            Method = HttpMethod.Get,
+            Method = HttpMethod.Post,
             RequestUri = new Uri(RegisterGoogleApiUrl, UriKind.Relative),
             Headers = { { "Authorization", $"Bearer {googleToken}" } }
         };

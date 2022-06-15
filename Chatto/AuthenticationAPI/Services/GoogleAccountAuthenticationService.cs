@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using ChattoAuth.Configuration;
-using ChattoAuth.Entities;
+using ChattoAuth.Infrastructure;
 using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;

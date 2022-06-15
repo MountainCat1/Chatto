@@ -1,4 +1,4 @@
-﻿namespace ChattoAuth.Entities;
+﻿namespace ChattoAuth.Infrastructure;
 
 public class ChattoAccount : Account
 {

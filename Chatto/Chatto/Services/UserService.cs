@@ -5,7 +5,8 @@ namespace Chatto.Services;
 
 public interface IUserService
 {
-    Task<string> GetUser(HttpRequest request);
+    Task<string> LoginUserGoogle(HttpRequest request);
+    Task<string> RegisterUserGoogle(HttpRequest request);
 }
 
 public class UserService : IUserService
@@ -18,9 +19,16 @@ public class UserService : IUserService
         _authenticationClient = authenticationClient;
     }
 
-    public async Task<string> GetUser(HttpRequest request)
+    public async Task<string> LoginUserGoogle(HttpRequest request)
     {
         var token = await _authenticationClient.LoginUserGoogle(request.Headers["Authorization"]);
+
+        return token;
+    }
+
+    public async Task<string> RegisterUserGoogle(HttpRequest request)
+    {
+        var token = await _authenticationClient.RegisterUserGoogle(request.Headers["Authorization"]);
 
         return token;
     }

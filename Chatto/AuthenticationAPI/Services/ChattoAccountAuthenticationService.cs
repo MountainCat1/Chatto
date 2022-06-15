@@ -1,4 +1,5 @@
-﻿using ChattoAuth.Entities;
+﻿
+using ChattoAuth.Infrastructure;
 
 namespace ChattoAuth.Services;
 

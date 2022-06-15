@@ -1,6 +1,5 @@
-﻿using ChattoAuth.Entities;
-
-namespace ChattoAuth.Entities;
+﻿
+namespace ChattoAuth.Infrastructure;
 
 public class GoogleAccount : Account
 {

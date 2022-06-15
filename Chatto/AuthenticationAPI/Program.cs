@@ -1,7 +1,7 @@
 using System.Configuration;
 using System.Text.Json.Serialization;
 using ChattoAuth.Configuration;
-using ChattoAuth.Entities;
+using ChattoAuth.Infrastructure;
 using ChattoAuth.Services;
 using ChattoAuth.Validators;
 using Microsoft.AspNetCore.Authentication;

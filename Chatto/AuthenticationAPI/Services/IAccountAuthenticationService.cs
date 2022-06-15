@@ -1,4 +1,6 @@
-﻿using ChattoAuth.Entities;
+﻿
+using ChattoAuth.Infrastructure;
+
 namespace ChattoAuth.Services;
 
 public interface IAccountAuthenticationService<TAccount, in TAuthenticationData> where TAccount : Account

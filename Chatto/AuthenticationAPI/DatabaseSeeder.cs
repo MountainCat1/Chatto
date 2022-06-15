@@ -1,5 +1,5 @@
 ﻿
-using ChattoAuth.Entities;
+using ChattoAuth.Infrastructure;
 
 public class DatabaseSeeder
 {

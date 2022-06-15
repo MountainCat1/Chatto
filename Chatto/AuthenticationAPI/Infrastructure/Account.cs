@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using ChattoAuth.Entities;
 
-namespace ChattoAuth.Entities;
+namespace ChattoAuth.Infrastructure;
 
 public class Account
 {

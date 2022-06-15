@@ -19,7 +19,15 @@ public class UserController : Controller
     [Route("LoginGoogle")]
     public async Task<IActionResult> LoginGoogle()
     {
-        var token = await _userService.GetUser(Request);
+        var token = await _userService.LoginUserGoogle(Request);
+        return Ok(token);
+    }
+    
+    [HttpGet]
+    [Route("RegisterGoogle")]
+    public async Task<IActionResult> RegisterGoogle()
+    {
+        var token = await _userService.RegisterUserGoogle(Request);
         return Ok(token);
     }
 }

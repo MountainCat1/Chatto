@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ChattoAuth.Entities;
+namespace ChattoAuth.Infrastructure;
 
 public class DatabaseContext : DbContext
 {
