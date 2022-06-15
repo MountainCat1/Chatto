@@ -40,9 +40,6 @@ public class GoogleAuthenticationController : Controller
         
         var jwt = await _accountService.GetAccountJwtAsync(account);
         
-        return Ok(new
-        {
-            jwt = jwt
-        });
+        return Ok(jwt);
     }
 }

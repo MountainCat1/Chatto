@@ -19,3 +19,11 @@ C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\obj\Debug\net6.0\refint\Chatto
 C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\obj\Debug\net6.0\Chatto.pdb
 C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\obj\Debug\net6.0\Chatto.genruntimeconfig.cache
 C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\obj\Debug\net6.0\ref\Chatto.dll
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\bin\Debug\net6.0\microservicesSettings.json
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\obj\Debug\net6.0\Chatto.csproj.CopyComplete
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Admin\source\Github\Chatto\Chatto\Chatto\obj\Debug\net6.0\Chatto.MvcApplicationPartsAssemblyInfo.cs

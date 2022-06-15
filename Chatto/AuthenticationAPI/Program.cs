@@ -10,13 +10,12 @@ using Microsoft.EntityFrameworkCore;
 
 // ========= BUILDER  =========
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("Secrets/Authentication.json");
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
 
 // ========= CONFIGURATION  =========
 var configuration = builder.Configuration;
 
+
+configuration.AddJsonFile("Secrets/Authentication.json");
 var authenticationSettings = new AuthenticationSettings();
 configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
 
@@ -26,6 +25,9 @@ services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
+services.AddSwaggerGen();
+services.AddAutoMapper(typeof(Program).Assembly);
 
 services.AddCors(options =>
 {
@@ -37,7 +39,7 @@ services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
-services.AddAutoMapper(typeof(Program).Assembly);
+
 services.AddDbContext<DatabaseContext>(
     options =>
     {
@@ -45,9 +47,10 @@ services.AddDbContext<DatabaseContext>(
     });
 
 services.AddSingleton<AuthenticationSettings>(authenticationSettings);
-
 services.AddScoped<IAccountService, AccountService>();
 services.AddScoped<IGoogleAuthenticationService, GoogleAuthenticationService>();
+
+
 
 // Authentication
 services

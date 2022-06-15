@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "rv8WmDbPizQny4Vv1R5JdHUGsqQYBG53anbyG8sI+j0=",
-  "Source": "ChattoAuth",
-  "BasePath": "_content/ChattoAuth",
+  "Hash": "uf9aEy6onMiVEinr5JEtHAuP11oIXo93g0LjYRlIrA4=",
+  "Source": "AuthenticationAPI",
+  "BasePath": "_content/AuthenticationAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

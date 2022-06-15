@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "VSGD1SKhCPof5eNHQJUyfKosyhpHTyNFtOdhC2ex9cFal9+kMRzxYIZ5usevJqo9f1gx9mmbvKUC7pVgXwPELQ==",
+  "dgSpecHash": "6pGsWRhQkxzqYXnxBwPtDB84rjh9cPUjQqX4PcEiabhHNMeIG6FcFfSUJ3nd3Mm8OvGe3+tqIFwnOM63XAZcNw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Admin\\source\\Github\\Chatto\\Chatto\\Chatto\\Chatto.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\rabbitmq.client\\6.3.1\\rabbitmq.client.6.3.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.3.1\\swashbuckle.aspnetcore.swagger.6.3.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.3.1\\swashbuckle.aspnetcore.swaggergen.6.3.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.3.1\\swashbuckle.aspnetcore.swaggerui.6.3.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.threading.channels\\4.7.1\\system.threading.channels.4.7.1.nupkg.sha512"
+  ],
   "logs": []
 }
