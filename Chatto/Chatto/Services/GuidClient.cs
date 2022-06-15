@@ -11,7 +11,7 @@ public class GuidClient : IGuidClient
 {
     private readonly HttpClient _httpClient;
     
-    private const string GetGuidRequestUri = "api/Get";
+    private const string GetGuidRequestUri = "api/Guid";
     
     public GuidClient(HttpClient httpClient)
     {
