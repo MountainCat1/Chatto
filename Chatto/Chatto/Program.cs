@@ -33,8 +33,14 @@ services.AddCors(options =>
 services.AddSwaggerGen();
 
 services.AddSingleton<MicroservicesSettings>(microservicesSettings);
-services.AddScoped<IAuthenticationClient, AuthenticationClient>();
-services.AddScoped<IUserService, UserService>();
+services.AddHttpClient<IAuthenticationClient, AuthenticationClient>(client =>
+{
+    client.BaseAddress = new Uri(microservicesSettings.AuthenticationSettings.Url);
+});
+services.AddHttpClient<IGuidClient, GuidClient>(client =>
+{
+    client.BaseAddress = new Uri(microservicesSettings.GuidSettings.Url);
+});
 
 // ======== APP
 

@@ -2,6 +2,9 @@
   "MicroservicesSettings": {
     "AuthenticationSettings": {
       "Url": "https://localhost:8001"
+    },
+    "GuidSettings": {
+      "Url": "https://localhost:8005"
     }
   }
 }

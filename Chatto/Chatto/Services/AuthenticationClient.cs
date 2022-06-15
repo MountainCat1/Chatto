@@ -17,7 +17,7 @@ public interface IAuthenticationClient
     Task<string> LoginUserGoogleAsync(string googleToken);
 }
 
-public class AuthenticationClient : IAuthenticationClient
+public class AuthenticationClient : HttpClient, IAuthenticationClient
 {
     private readonly MicroservicesSettings _microservicesSettings;
 
@@ -29,13 +29,10 @@ public class AuthenticationClient : IAuthenticationClient
     private const string LoginChattoApiUrl = "api/Account/LoginGoogle";
     private const string RegisterChattoApiUrl = "api/Account/LoginGoogle";
 
-    public AuthenticationClient(MicroservicesSettings microservicesSettings)
+    public AuthenticationClient(MicroservicesSettings microservicesSettings, HttpClient httpClient)
     {
         _microservicesSettings = microservicesSettings;
-        _httpClient = new HttpClient()
-        {
-            BaseAddress = new Uri(microservicesSettings.AuthenticationSettings.Url)
-        };
+        _httpClient = httpClient;
     }
     
     public async Task<string> RegisterUserChattoAsync(string username, string hashedPassword)
