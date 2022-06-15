@@ -713,6 +713,16 @@
             "rid": "win"
           }
         }
+      },
+      "Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Shared.dll": {}
+        }
       }
     }
   },
@@ -2082,6 +2092,11 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Shared/1.0.0": {
+      "type": "project",
+      "path": "../Shared/Shared.csproj",
+      "msbuildProject": "../Shared/Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -2091,6 +2106,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.6",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.6",
       "RabbitMQ.Client >= 6.3.1",
+      "Shared >= 1.0.0",
       "Swashbuckle.AspNetCore.SwaggerGen >= 6.3.1",
       "Swashbuckle.AspNetCore.SwaggerUI >= 6.3.1"
     ]
@@ -2119,7 +2135,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Admin\\source\\Github\\Chatto\\Chatto\\Shared\\Shared.csproj": {
+              "projectPath": "C:\\Users\\Admin\\source\\Github\\Chatto\\Chatto\\Shared\\Shared.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

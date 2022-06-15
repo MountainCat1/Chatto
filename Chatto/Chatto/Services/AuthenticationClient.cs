@@ -5,14 +5,16 @@ using System.Text.Json.Serialization;
 using Chatto.Configuration;
 using Chatto.Models;
 
+using Shared.Extensions;
+
 namespace Chatto.Services;
 
 public interface IAuthenticationClient
 {
-    Task<string> RegisterUserChatto(string username, string hashedPassword);
-    Task<string> LoginUserChatto(string username, string hashedPassword);
-    Task<string> RegisterUserGoogle(string googleToken);
-    Task<string> LoginUserGoogle(string googleToken);
+    Task<string> RegisterUserChattoAsync(string username, string hashedPassword);
+    Task<string> LoginUserChattoAsync(string username, string hashedPassword);
+    Task<string> RegisterUserGoogleAsync(string googleToken);
+    Task<string> LoginUserGoogleAsync(string googleToken);
 }
 
 public class AuthenticationClient : IAuthenticationClient
@@ -36,7 +38,7 @@ public class AuthenticationClient : IAuthenticationClient
         };
     }
     
-    public async Task<string> RegisterUserChatto(string username, string hashedPassword)
+    public async Task<string> RegisterUserChattoAsync(string username, string hashedPassword)
     {
         var httpMessage = new HttpRequestMessage()
         {
@@ -45,13 +47,10 @@ public class AuthenticationClient : IAuthenticationClient
             Content = new StringContent(JsonSerializer.Serialize(new { username, hashedPassword }))
         };
         var response = await _httpClient.SendAsync(httpMessage);
-        using (var reader = new StreamReader(await response.Content.ReadAsStreamAsync(), Encoding.UTF8))
-        {
-            return await reader.ReadToEndAsync();
-        }
+        return await response.Content.GetTextAsync();
     }
     
-    public async Task<string> LoginUserChatto(string username, string hashedPassword)
+    public async Task<string> LoginUserChattoAsync(string username, string hashedPassword)
     {
         var httpMessage = new HttpRequestMessage()
         {
@@ -60,13 +59,10 @@ public class AuthenticationClient : IAuthenticationClient
             Content = new StringContent(JsonSerializer.Serialize(new { username, hashedPassword }))
         };
         var response = await _httpClient.SendAsync(httpMessage);
-        using (var reader = new StreamReader(await response.Content.ReadAsStreamAsync(), Encoding.UTF8))
-        {
-            return await reader.ReadToEndAsync();
-        }
+        return await response.Content.GetTextAsync();
     }
 
-    public async Task<string> RegisterUserGoogle(string googleToken)
+    public async Task<string> RegisterUserGoogleAsync(string googleToken)
     {
         var httpMessage = new HttpRequestMessage()
         {
@@ -81,7 +77,7 @@ public class AuthenticationClient : IAuthenticationClient
         }
     }
 
-    public async Task<string> LoginUserGoogle(string googleToken)
+    public async Task<string> LoginUserGoogleAsync(string googleToken)
     {
         var httpMessage = new HttpRequestMessage()
         {
