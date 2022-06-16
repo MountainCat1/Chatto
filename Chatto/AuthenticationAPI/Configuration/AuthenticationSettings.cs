@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
 
 namespace ChattoAuth.Configuration;
 public class AuthenticationSettings

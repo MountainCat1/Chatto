@@ -19,13 +19,13 @@ public class ChattoAuthenticationService : IChattoAuthenticationService
 
     public async Task<ChattoAccount> AuthenticateAsync(HttpRequest request)
     {
-        _logger.LogError($"Chatto authentication has not been implemented yet!");
+        _logger.LogError($"ChattoAPI authentication has not been implemented yet!");
         throw new NotImplementedException();
     }
 
     public async Task RegisterAsync(ChattoAccountData authenticationData)
     {
-        _logger.LogError($"Chatto authentication has not been implemented yet!");
+        _logger.LogError($"ChattoAPI authentication has not been implemented yet!");
         throw new NotImplementedException();
     }
 }

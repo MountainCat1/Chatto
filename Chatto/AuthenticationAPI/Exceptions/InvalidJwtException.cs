@@ -1,4 +1,6 @@
-﻿namespace ChattoAuth.Exceptions;
+﻿using System;
+
+namespace ChattoAuth.Exceptions;
 
 public class InvalidJwtException : Exception
 {

@@ -1,11 +1,16 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
+using System.Threading.Tasks;
 using ChattoAuth.Configuration;
 using ChattoAuth.Exceptions;
 using ChattoAuth.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ChattoAuth.Services;
@@ -20,7 +25,7 @@ public interface IAccountService
     Task<Account> GetAccountAsync(int accountId);
 
     /// <summary>
-    /// Generates JWT containing Chatto signature and account ID 
+    /// Generates JWT containing ChattoAPI signature and account ID 
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>
@@ -73,7 +78,7 @@ public class AccountService : IAccountService
     }
 
     /// <summary>
-    /// Generates JWT containing Chatto signature and account ID 
+    /// Generates JWT containing ChattoAPI signature and account ID 
     /// </summary>
     /// <param name="account"></param>
     /// <returns></returns>

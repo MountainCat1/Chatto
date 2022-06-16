@@ -3,8 +3,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Chatto.Configuration;
-using Chatto.Models;
-
 using Shared.Extensions;
 
 namespace Chatto.Services;

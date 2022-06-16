@@ -5,6 +5,9 @@
     },
     "GuidSettings": {
       "Url": "https://localhost:8005"
+    },
+    "Communication": {
+      "Url": "https://localhost:8003"
     }
   }
 }

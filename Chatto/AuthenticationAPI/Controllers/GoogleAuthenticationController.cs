@@ -1,4 +1,5 @@
-﻿using ChattoAuth.Services;
+﻿using System.Threading.Tasks;
+using ChattoAuth.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChattoAuth.Controllers;

@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Chatto.Infrastructure;
-using Chatto.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Shared.Models;
 
@@ -16,11 +15,15 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly IAuthenticationClient _authenticationClient;
+
     private readonly IGuidClient _guidClient;
     private readonly DatabaseContext _databaseContext;
 
 
-    public UserService(IAuthenticationClient authenticationClient, DatabaseContext databaseContext, IGuidClient guidClient)
+    public UserService(
+        IAuthenticationClient authenticationClient, 
+        DatabaseContext databaseContext, 
+        IGuidClient guidClient)
     {
         _authenticationClient = authenticationClient;
         _databaseContext = databaseContext;
