@@ -74,6 +74,15 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
 
         var googleId = (await ValidateGoogleJwt(authenticationData.Jwt)).Subject;
 
+        
+        // If account with associated google ID exists, don't create a new one
+        if (await _databaseContext.Accounts
+                .OfType<GoogleAccount>()
+                .AnyAsync(x => x.GoogleId == googleId))
+        {
+            return;
+        }
+        
         var newAccount = new GoogleAccount()
         {
             GoogleId = googleId
