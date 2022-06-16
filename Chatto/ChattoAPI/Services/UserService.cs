@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Chatto.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 
 namespace Chatto.Services;
@@ -40,16 +41,26 @@ public class UserService : IUserService
     public async Task<string> RegisterUserGoogle(GoogleRegisterModel registerModel)
     {
         var tokenString = await _authenticationClient.RegisterUserGoogleAsync(registerModel.GoogleJwt);
-
+        
         var jwtHandler = new JwtSecurityTokenHandler();
         var jwtToken = jwtHandler.ReadJwtToken(tokenString);
+        var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
+        
+        // If user with associated account ID already exists, dont create new one
+        // just send back auth token
+        if (await _databaseContext.Users.AnyAsync(x => x.AccountId == accountId))
+            return tokenString;
+        
         var newUser = new User()
         {
             Guid = await _guidClient.GetGuid(),
-            AccountId = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value),
+            AccountId = accountId,
             Username = registerModel.Username
         };
+        
+        
+
 
         await _databaseContext.Users.AddAsync(newUser);
         await _databaseContext.SaveChangesAsync();
