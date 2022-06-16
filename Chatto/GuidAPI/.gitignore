@@ -76,3 +76,4 @@ _[Ss]cripts
 *.nupkg
 *.ncrunchsolution
 *.dot[Cc]over
+Chatto/AuthenticationAPI/Secrets/Authentication.json
