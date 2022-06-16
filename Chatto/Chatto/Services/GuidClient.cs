@@ -26,8 +26,8 @@ public class GuidClient : IGuidClient
         };
 
         var response = await _httpClient.SendAsync(request);
-        
-        return new Guid(await response.Content.GetTextAsync());
+        var guidText = await response.Content.GetTextAsync();
+        return new Guid(guidText);
     }
 
 }

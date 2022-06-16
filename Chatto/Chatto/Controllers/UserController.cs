@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Chatto.Models;
 using Chatto.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 
@@ -25,7 +26,7 @@ public class UserController : Controller
         return Ok(token);
     }
     
-    [HttpGet]
+    [HttpPost]
     [Route("RegisterGoogle")]
     public async Task<IActionResult> RegisterGoogle([FromBody] GoogleRegisterModel registerModel)
     {

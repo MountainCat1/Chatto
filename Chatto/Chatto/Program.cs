@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using Chatto.Configuration;
+using Chatto.Infrastructure;
 using Chatto.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,12 +24,16 @@ services.AddControllers().AddJsonOptions(options =>
 services.AddCors(options =>
 {
     options.AddDefaultPolicy(
-        policy  =>
+        policy =>
         {
             policy.WithOrigins(configuration.GetSection("Cors:AllowedDomains").Get<string[]>())
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
+});
+services.AddDbContext<DatabaseContext>((options) =>
+{
+    options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection"));
 });
 
 services.AddSwaggerGen();
@@ -41,6 +47,9 @@ services.AddHttpClient<IGuidClient, GuidClient>(client =>
 {
     client.BaseAddress = new Uri(microservicesSettings.GuidSettings.Url);
 });
+services.AddScoped<IUserService, UserService>();
+
+services.AddScoped<DatabaseSeeder>();
 
 // ======== APP
 
@@ -54,7 +63,9 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
-
+    
+    var seeder = new DatabaseSeeder(services.BuildServiceProvider().GetService<DatabaseContext>());
+    seeder.Seed(false);
 }
 
 app.UseHttpsRedirection();

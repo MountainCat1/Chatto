@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Chatto.Infrastructure;
 using Chatto.Models;
 using Microsoft.AspNetCore.DataProtection;
@@ -15,13 +16,15 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly IAuthenticationClient _authenticationClient;
+    private readonly IGuidClient _guidClient;
     private readonly DatabaseContext _databaseContext;
 
 
-    public UserService(IAuthenticationClient authenticationClient, DatabaseContext databaseContext)
+    public UserService(IAuthenticationClient authenticationClient, DatabaseContext databaseContext, IGuidClient guidClient)
     {
         _authenticationClient = authenticationClient;
         _databaseContext = databaseContext;
+        _guidClient = guidClient;
     }
 
     public async Task<string> LoginUserGoogle(HttpRequest request)
@@ -40,7 +43,8 @@ public class UserService : IUserService
 
         var newUser = new User()
         {
-            AccountId = int.Parse(jwtToken.Id),
+            Guid = await _guidClient.GetGuid(),
+            AccountId = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value),
             Username = registerModel.Username
         };
 
@@ -49,5 +53,4 @@ public class UserService : IUserService
         
         return tokenString;
     }
-    
 }

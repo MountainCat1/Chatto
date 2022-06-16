@@ -32,12 +32,22 @@ export default function () {
 
 // Calls Back-End API to create a google account
 function callApiRegister(jwt: string) {
+
+    const content = {
+        "GoogleJwt": jwt,
+        "Username": "Some Username!"
+    }
+
     const requestOptions = {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${jwt}` },
+        //headers: { 'Authorization': `Bearer ${jwt}` },
+        headers: { 
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(content)
     };
 
-    fetch('https://localhost:8000/api/Account/RegisterGoogle', requestOptions)
+    fetch('https://localhost:8000/api/User/RegisterGoogle', requestOptions)
         .then(response => response.json())
         .then(json => {
             console.log('Login response: ', json)

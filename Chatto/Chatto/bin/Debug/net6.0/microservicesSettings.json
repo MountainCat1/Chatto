@@ -1,7 +1,0 @@
-{
-  "MicroservicesSettings": {
-    "AuthenticationSettings": {
-      "Url": "https://localhost:8001"
-    }
-  }
-}

@@ -9,6 +9,6 @@ public class Guid : Controller
     [HttpGet("")]
     public IActionResult Index()
     {
-        return Ok(System.Guid.NewGuid());
+        return Ok(System.Guid.NewGuid().ToString());
     }
 }

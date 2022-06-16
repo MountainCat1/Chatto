@@ -1,8 +1,11 @@
-﻿namespace Chatto.Infrastructure;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Chatto.Infrastructure;
 
 public class User
 {
-    public Guid Id { get; set; }
+    [Key]
+    public Guid Guid { get; set; }
     public string Username { get; set; }
     public int AccountId { get; set; }
 }
