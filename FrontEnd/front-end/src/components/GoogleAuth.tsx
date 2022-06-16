@@ -16,7 +16,7 @@ export default function () {
             </div>
 
             <div>
-            <h2>Login</h2>
+                <h2>Login</h2>
                 <GoogleLogin
                     onSuccess={credentialResponse => {
                         callApiLogin(credentialResponse.credential as string);
@@ -41,34 +41,32 @@ function callApiRegister(jwt: string) {
     const requestOptions = {
         method: 'POST',
         //headers: { 'Authorization': `Bearer ${jwt}` },
-        headers: { 
-            'Content-Type' : 'application/json'
+        headers: {
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(content)
     };
 
     fetch('https://localhost:8000/api/User/RegisterGoogle', requestOptions)
-        .then(response => response.json())
-        .then(json => {
-            console.log('Login response: ', json)
-        });
+        .then(response => {
+            response.text().then(text => console.log(text))
+        })
 }
 
 // Calls Back-End API to create a get account JWT
 function callApiLogin(jwt: string) {
     const requestOptions = {
         method: 'GET',
-        headers: { 
+        headers: {
             'Authorization': `Bearer ${jwt}`,
             'Content-Type': 'application/json'
-         },
+        },
     };
 
     fetch('https://localhost:8000/api/User/LoginGoogle', requestOptions)
-        .then(response => response.json())
-        .then(json => {
-            console.log('Login response: ', json)
-        });
+        .then(response => {
+            response.text().then(text => console.log(text))
+        })
 }
 
 function parseJwt(token: string) {

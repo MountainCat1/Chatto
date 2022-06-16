@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Chatto.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +12,12 @@ namespace Chatto.Controllers;
 [Route("api/User")]
 public class UserController : Controller
 {
+    private readonly IAuthenticationService _authenticationService;
     private readonly IUserService _userService;
-
-    public UserController(IUserService userService)
+    
+    public UserController(IAuthenticationService authenticationService, IUserService userService)
     {
+        _authenticationService = authenticationService;
         _userService = userService;
     }
 
@@ -22,16 +25,26 @@ public class UserController : Controller
     [Route("LoginGoogle")]
     public async Task<IActionResult> LoginGoogle()
     {
-        var token = await _userService.LoginUserGoogle(Request);
-        return Ok(token);
+        var tokenString = await _authenticationService.LoginUserGoogle(Request);
+        return Ok(tokenString);
     }
     
     [HttpPost]
     [Route("RegisterGoogle")]
     public async Task<IActionResult> RegisterGoogle([FromBody] GoogleRegisterModel registerModel)
     {
-        var tokenString = await _userService.RegisterUserGoogle(registerModel);
+        var tokenString = await _authenticationService.RegisterUserGoogle(registerModel);
         
         return Ok(tokenString);
+    }
+
+    [HttpGet]
+    [Route("WhoAmI")]
+    public async Task<IActionResult> WhoAmI()
+    {
+        var claim = User.FindFirst(u => u.Type == ClaimTypes.NameIdentifier);
+        var userEntity = await _userService.GetUserAsync(int.Parse(claim.Value));
+        
+        return Ok($"{userEntity.Username} {userEntity.Guid}");
     }
 }

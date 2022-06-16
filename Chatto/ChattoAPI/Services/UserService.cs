@@ -7,13 +7,13 @@ using Shared.Models;
 
 namespace Chatto.Services;
 
-public interface IUserService
+public interface IAuthenticationService
 {
     Task<string> LoginUserGoogle(HttpRequest request);
     Task<string> RegisterUserGoogle(GoogleRegisterModel registerModel);
 }
 
-public class UserService : IUserService
+public class AuthenticationService : IAuthenticationService
 {
     private readonly IAuthenticationClient _authenticationClient;
 
@@ -21,7 +21,7 @@ public class UserService : IUserService
     private readonly DatabaseContext _databaseContext;
 
 
-    public UserService(
+    public AuthenticationService(
         IAuthenticationClient authenticationClient, 
         DatabaseContext databaseContext, 
         IGuidClient guidClient)
@@ -59,9 +59,6 @@ public class UserService : IUserService
             Username = registerModel.Username
         };
         
-        
-
-
         await _databaseContext.Users.AddAsync(newUser);
         await _databaseContext.SaveChangesAsync();
         

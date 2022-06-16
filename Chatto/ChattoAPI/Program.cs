@@ -1,8 +1,11 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using Chatto.Configuration;
+using Chatto.Controllers;
 using Chatto.Infrastructure;
 using Chatto.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,11 @@ configuration.AddJsonFile("microservicesSettings.json");
 var microservicesSettings = new MicroservicesSettings();
 configuration.GetSection("MicroservicesSettings").Bind(microservicesSettings);
 
+configuration.AddJsonFile("Secrets/Authentication.json");
+var authenticationSettings = new AuthenticationSettings();
+configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
+
+
 // ======== SERVICES
 var services = builder.Services;
 
@@ -21,6 +29,24 @@ services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+services.AddAuthentication(option =>
+    {
+        option.DefaultAuthenticateScheme = "Bearer";
+        option.DefaultScheme = "Bearer";
+        option.DefaultChallengeScheme = "Bearer";
+    }
+).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = true;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+    };
+});
+
 services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -47,9 +73,10 @@ services.AddHttpClient<IGuidClient, GuidClient>(client =>
 {
     client.BaseAddress = new Uri(microservicesSettings.GuidSettings.Url);
 });
-services.AddScoped<IUserService, UserService>();
 
+services.AddScoped<IAuthenticationService, AuthenticationService>();
 services.AddScoped<DatabaseSeeder>();
+services.AddScoped<IUserService, UserService>();
 
 // ======== APP
 
@@ -72,9 +99,10 @@ app.UseHttpsRedirection();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.UseRouting();
-app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRouting();
+app.UseCors();
+
 
 app.Run();
