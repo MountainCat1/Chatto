@@ -4,7 +4,7 @@ namespace Chatto.Services;
 
 public interface IGuidClient
 {
-    Task<Guid> GetGuid();
+    Task<Guid> GetGuidAsync();
 }
 
 public class GuidClient : IGuidClient
@@ -18,7 +18,7 @@ public class GuidClient : IGuidClient
         _httpClient = httpClient;
     }
 
-    public async Task<Guid> GetGuid()
+    public async Task<Guid> GetGuidAsync()
     {
         var request = new HttpRequestMessage()
         {

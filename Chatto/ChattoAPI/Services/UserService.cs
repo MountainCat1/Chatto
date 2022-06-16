@@ -54,7 +54,7 @@ public class AuthenticationService : IAuthenticationService
         
         var newUser = new User()
         {
-            Guid = await _guidClient.GetGuid(),
+            Guid = await _guidClient.GetGuidAsync(),
             AccountId = accountId,
             Username = registerModel.Username
         };

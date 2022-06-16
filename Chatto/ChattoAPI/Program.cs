@@ -77,6 +77,7 @@ services.AddHttpClient<IGuidClient, GuidClient>(client =>
 services.AddScoped<IAuthenticationService, AuthenticationService>();
 services.AddScoped<DatabaseSeeder>();
 services.AddScoped<IUserService, UserService>();
+services.AddScoped<ITextChannelService, TextChannelService>();
 
 // ======== APP
 
