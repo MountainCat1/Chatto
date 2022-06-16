@@ -46,18 +46,20 @@ public class AccountService : IAccountService
 {
     private readonly AuthenticationSettings _authenticationSettings;
     private readonly DatabaseContext _databaseContext;
+    private readonly ILogger<IAccountService> _logger;
 
     private readonly IGoogleAuthenticationService _googleAuthenticationService;
 
     public AccountService(
         AuthenticationSettings authenticationSettings, 
         DatabaseContext databaseContext, 
-        IGoogleAuthenticationService googleAuthenticationService
-        )
+        IGoogleAuthenticationService googleAuthenticationService, 
+        ILogger<IAccountService> logger)
     {
         _authenticationSettings = authenticationSettings;
         _databaseContext = databaseContext;
         _googleAuthenticationService = googleAuthenticationService;
+        _logger = logger;
     }
 
     /// <summary>
@@ -102,6 +104,7 @@ public class AccountService : IAccountService
     /// <returns></returns>
     public bool AuthenticateChattoJwtToken(string authToken, out int accountId)
     {
+        _logger.LogInformation($"Authenticating chatto jwt... {authToken}");
         accountId = -1;
         
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -125,6 +128,8 @@ public class AccountService : IAccountService
         var securityToken = (JwtSecurityToken)tokenHandler.ReadToken(authToken);
         accountId = int.Parse(securityToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
             
+        _logger.LogInformation($"Authentication successful! (Account ID: {accountId})");
+        
         return true;
     }
     

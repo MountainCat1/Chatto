@@ -25,10 +25,6 @@ services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
-
-services.AddSwaggerGen();
-services.AddAutoMapper(typeof(Program).Assembly);
-
 services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -39,12 +35,16 @@ services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
-
 services.AddDbContext<DatabaseContext>(
     options =>
     {
         options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection"));
     });
+
+
+services.AddSwaggerGen();
+services.AddAutoMapper(typeof(Program).Assembly);
+services.AddLogging();
 
 services.AddSingleton<AuthenticationSettings>(authenticationSettings);
 services.AddScoped<IAccountService, AccountService>();

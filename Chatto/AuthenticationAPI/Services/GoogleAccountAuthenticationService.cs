@@ -26,13 +26,16 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
 {
     private readonly AuthenticationSettings _authenticationSettings;
     private readonly DatabaseContext _databaseContext;
+    private readonly ILogger<IGoogleAuthenticationService> _logger;
 
     public GoogleAuthenticationService(
         AuthenticationSettings authenticationSettings, 
-        DatabaseContext databaseContext)
+        DatabaseContext databaseContext,
+        ILogger<IGoogleAuthenticationService> logger)
     {
         _authenticationSettings = authenticationSettings;
         _databaseContext = databaseContext;
+        _logger = logger;
     }
     
     public async Task<GoogleAccount> CreateAccountEntityAsync(string googleJwt)
@@ -50,6 +53,8 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
     /// <returns></returns>
     public async Task<GoogleAccount> AuthenticateAsync(HttpRequest request)
     {
+        _logger.LogInformation($"Authenticating http request with google...");
+        
         request.Headers.TryGetValue("Authorization", out var googleJwt);
         
         var jwtPayload = await ValidateGoogleJwt(googleJwt);
@@ -58,11 +63,15 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
             .OfType<GoogleAccount>()
             .FirstAsync(x => x.GoogleId == jwtPayload.Subject);
 
+        _logger.LogInformation($"Google Authentication successful!");
+        
         return account;
     }
 
     public async Task RegisterAsync(GoogleAuthenticationData authenticationData)
     {
+        _logger.LogInformation($"Registering account... {authenticationData.Jwt}");
+
         var googleId = (await ValidateGoogleJwt(authenticationData.Jwt)).Subject;
 
         var newAccount = new GoogleAccount()
@@ -72,6 +81,8 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
 
         await _databaseContext.Accounts.AddAsync(newAccount);
         await _databaseContext.SaveChangesAsync();
+        
+        _logger.LogInformation($"Account registered!");
     }
 
     /// <summary>

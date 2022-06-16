@@ -3,6 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddControllers();
+services.AddLogging();
 
 var app = builder.Build();
 app.UseRouting();

@@ -4,11 +4,21 @@ namespace GuidAPI.Controllers;
 
 [ApiController]
 [Route("/api/Guid")]
-public class Guid : Controller
+public class GuidController : Controller
 {
+
+    private readonly ILogger<GuidController> _logger;
+
+    public GuidController(ILogger<GuidController> logger)
+    {
+        _logger = logger;
+    }
+
     [HttpGet("")]
     public IActionResult Index()
     {
-        return Ok(System.Guid.NewGuid().ToString());
+        var guid = System.Guid.NewGuid().ToString();
+        _logger.LogInformation($"Sending new guid... {guid}");
+        return Ok(guid);
     }
 }
