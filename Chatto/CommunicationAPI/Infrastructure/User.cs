@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Chatto.Infrastructure;
+namespace CommunicationAPI.Infrastructure;
 
 public class User
 {

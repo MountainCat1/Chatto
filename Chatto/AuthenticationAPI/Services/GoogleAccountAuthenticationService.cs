@@ -8,7 +8,6 @@ using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
-using InvalidJwtException = ChattoAuth.Exceptions.InvalidJwtException;
 
 namespace ChattoAuth.Services;
 

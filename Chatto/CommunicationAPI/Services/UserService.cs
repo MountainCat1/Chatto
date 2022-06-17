@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Chatto.Infrastructure;
+using CommunicationAPI.Infrastructure;
 using Shared.Models;
 
 namespace CommunicationAPI.Services;

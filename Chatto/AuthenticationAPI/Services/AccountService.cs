@@ -7,11 +7,11 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using ChattoAuth.Configuration;
-using ChattoAuth.Exceptions;
 using ChattoAuth.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Exceptions;
 
 namespace ChattoAuth.Services;
 

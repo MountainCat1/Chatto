@@ -1,4 +1,4 @@
-﻿namespace Chatto.Infrastructure;
+﻿namespace CommunicationAPI.Infrastructure;
 
 public class DatabaseSeeder
 {

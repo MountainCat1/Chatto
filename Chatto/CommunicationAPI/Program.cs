@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Chatto.Infrastructure;
+using CommunicationAPI.Infrastructure;
 using CommunicationAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +33,7 @@ services.AddLogging();
 
 
 services.AddAutoMapper(typeof(Program).Assembly);
+services.AddSwaggerGen();
 
 services.AddScoped<IUserService, UserService>();
 
@@ -51,4 +52,9 @@ if (app.Environment.IsDevelopment())
     var dbContext = services.BuildServiceProvider().GetService<DatabaseContext>();
 
 }
+app.UseCors();
+app.UseHttpsRedirection();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
