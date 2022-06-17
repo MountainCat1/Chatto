@@ -53,7 +53,7 @@ services.AddScoped<IGoogleAuthenticationService, GoogleAuthenticationService>();
 
 
 // Authentication
-services
+/*services
     .AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,7 +69,7 @@ services
     {
         jwtBearerOptions.SecurityTokenValidators.Clear();
         jwtBearerOptions.SecurityTokenValidators.Add(new GoogleTokenValidator(authenticationSettings.Google.ClientId));
-    });
+    });*/
 
 // ========= RUN APP  =========
 var app = builder.Build();

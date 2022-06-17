@@ -37,7 +37,8 @@ public class UserController : Controller
         
         return Ok(tokenString);
     }
-
+    
+    [Authorize]
     [HttpGet]
     [Route("WhoAmI")]
     public async Task<IActionResult> WhoAmI()
@@ -46,5 +47,13 @@ public class UserController : Controller
         var userEntity = await _userService.GetUserAsync(int.Parse(claim.Value));
         
         return Ok($"{userEntity.Username} {userEntity.Guid}");
+    }
+    
+    [AllowAnonymous]
+    [HttpGet]
+    [Route("IsApiAlive")]
+    public async Task<IActionResult> AutorizationCheck()
+    {
+        return Ok("YES!");
     }
 }

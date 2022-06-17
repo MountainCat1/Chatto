@@ -4,26 +4,39 @@ using Chatto.Configuration;
 using Chatto.Controllers;
 using Chatto.Infrastructure;
 using Chatto.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Configuration;
+using Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// ========= CONFIGURATION  =========
 var configuration = builder.Configuration;
+var services = builder.Services;
+// ========= CONFIGURATION  =========
+
 
 configuration.AddJsonFile("microservicesSettings.json");
 var microservicesSettings = new MicroservicesSettings();
 configuration.GetSection("MicroservicesSettings").Bind(microservicesSettings);
+services.AddSingleton(microservicesSettings);
 
 configuration.AddJsonFile("Secrets/Authentication.json");
 var authenticationSettings = new AuthenticationSettings();
 configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
+services.AddSingleton(authenticationSettings);
 
+configuration.AddJsonFile("Secrets/SecuritySettings.json");
+var securitySettings = new MicroserviceSecuritySettings();
+configuration.GetSection("SecuritySettings").Bind(securitySettings);
+services.AddSingleton(securitySettings);
 
 // ======== SERVICES
-var services = builder.Services;
+
 
 services.AddControllers().AddJsonOptions(options =>
 {
@@ -46,6 +59,10 @@ services.AddAuthentication(option =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
     };
 });
+services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+});
 
 services.AddCors(options =>
 {
@@ -64,7 +81,9 @@ services.AddDbContext<DatabaseContext>((options) =>
 
 services.AddSwaggerGen();
 
-services.AddSingleton<MicroservicesSettings>(microservicesSettings);
+
+services.AddScoped<IMicroserviceAuthenticationService, MicroserviceAuthenticationService>();
+
 services.AddHttpClient<IAuthenticationClient, AuthenticationClient>(client =>
 {
     client.BaseAddress = new Uri(microservicesSettings.AuthenticationSettings.Url);
@@ -78,6 +97,7 @@ services.AddScoped<IAuthenticationService, AuthenticationService>();
 services.AddScoped<DatabaseSeeder>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<ITextChannelService, TextChannelService>();
+
 
 // ======== APP
 
@@ -100,10 +120,11 @@ app.UseHttpsRedirection();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.UseAuthentication();
-app.UseAuthorization();
+
 app.UseRouting();
 app.UseCors();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

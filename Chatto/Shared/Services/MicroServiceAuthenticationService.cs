@@ -9,22 +9,22 @@ using Shared.Exceptions;
 
 namespace Shared.Services;
 
-public interface IMicroServiceAuthenticationService
+public interface IMicroserviceAuthenticationService
 {
-    public Task<string> GetMicroserviceJWT();
+    public Task<string> GetMicroserviceJWTAsync();
     public Task<bool> ValidateMicroserviceJWT(string jwtToken);
 }
 
-public class MicroServiceAuthenticationService : IMicroServiceAuthenticationService
+public class MicroserviceAuthenticationService : IMicroserviceAuthenticationService
 {
     private readonly MicroserviceSecuritySettings _securitySettings;
 
-    public MicroServiceAuthenticationService(MicroserviceSecuritySettings securitySettings)
+    public MicroserviceAuthenticationService(MicroserviceSecuritySettings securitySettings)
     {
         _securitySettings = securitySettings;
     }
 
-    public async Task<string> GetMicroserviceJWT()
+    public async Task<string> GetMicroserviceJWTAsync()
     {
         var claims = new List<Claim>()
         {

@@ -1,12 +1,20 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
 using CommunicationAPI.Infrastructure;
 using CommunicationAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Shared.Configuration;
+using Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ========= CONFIGURATION  =========
 var configuration = builder.Configuration;
+
+configuration.AddJsonFile("Secrets/SecuritySettings.json");
+var securitySettings = new MicroserviceSecuritySettings();
+configuration.GetSection("SecuritySettings").Bind(securitySettings);
 
 // ======== SERVICES
 var services = builder.Services;
@@ -30,12 +38,27 @@ services.AddDbContext<DatabaseContext>((options) =>
     options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection"));
 });
 services.AddLogging();
+services.AddAuthentication()
+    .AddJwtBearer(jwtBearerOptions =>
+    {
+        jwtBearerOptions.SecurityTokenValidators.Clear();
+        jwtBearerOptions.SecurityTokenValidators.Add(new JwtSecurityTokenHandler());
+    });
+/*services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicy("Default Policy");
+});*/
 
 
 services.AddAutoMapper(typeof(Program).Assembly);
 services.AddSwaggerGen();
 
+services.Configure<MicroserviceSecuritySettings>(
+    options => configuration.GetSection("SecuritySettings").Bind(options));
+
+
 services.AddScoped<IUserService, UserService>();
+services.AddScoped<IMicroserviceAuthenticationService, MicroserviceAuthenticationService>();
 
 // ======== APP
 var app = builder.Build();
@@ -50,10 +73,14 @@ if (app.Environment.IsDevelopment())
     });
 
     var dbContext = services.BuildServiceProvider().GetService<DatabaseContext>();
-
 }
+
 app.UseCors();
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
