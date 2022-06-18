@@ -9,7 +9,7 @@ using Shared.Models;
 namespace Chatto.Controllers;
 
 [ApiController]
-[Route("api/User")]
+[Route("api/Authentication")]
 public class UserController : Controller
 {
     private readonly IAuthenticationService _authenticationService;
@@ -21,6 +21,7 @@ public class UserController : Controller
         _userService = userService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     [Route("LoginGoogle")]
     public async Task<IActionResult> LoginGoogle()
@@ -29,6 +30,7 @@ public class UserController : Controller
         return Ok(tokenString);
     }
     
+    [AllowAnonymous]
     [HttpPost]
     [Route("RegisterGoogle")]
     public async Task<IActionResult> RegisterGoogle([FromBody] GoogleRegisterModel registerModel)

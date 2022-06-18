@@ -47,7 +47,7 @@ function callApiRegister(jwt: string) {
         body: JSON.stringify(content)
     };
 
-    fetch('https://localhost:8000/api/User/RegisterGoogle', requestOptions)
+    fetch('https://localhost:8000/api/Authentication/RegisterGoogle', requestOptions)
         .then(response => {
             response.text().then(text => console.log(text))
         })
@@ -56,14 +56,14 @@ function callApiRegister(jwt: string) {
 // Calls Back-End API to create a get account JWT
 function callApiLogin(jwt: string) {
     const requestOptions = {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Authorization': `Bearer ${jwt}`,
             'Content-Type': 'application/json'
         },
     };
 
-    fetch('https://localhost:8000/api/User/LoginGoogle', requestOptions)
+    fetch('https://localhost:8000/api/Authentication/LoginGoogle', requestOptions)
         .then(response => {
             response.text().then(text => console.log(text))
         })

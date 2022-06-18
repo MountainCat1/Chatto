@@ -1,12 +1,16 @@
-﻿using Chatto.Infrastructure;
+﻿using System.Security.Claims;
+using Chatto.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chatto.Services;
 
 public interface IUserService
 {
+    Task<User> GetUserAsync(ClaimsPrincipal claimsPrincipal);
     Task<User> GetUserAsync(int accountId);
-    Task<ICollection<TextChannel>> GetUserTextChannels(Guid userGuid);
+    Task<User> GetUserAsync(Guid guid);
+    Task<IList<TextChannel>> GetUserTextChannelsAsync(Guid userGuid);
+
 }
 
 public class UserService : IUserService
@@ -23,13 +27,29 @@ public class UserService : IUserService
         
         return entity;
     }
-
-    public async Task<ICollection<TextChannel>> GetUserTextChannels(Guid userGuid)
+    
+    public async Task<User> GetUserAsync(Guid guid)
+    {
+        var entity = await _databaseContext.Users.FindAsync(guid);
+        
+        return entity;
+    }
+    
+    public async Task<IList<TextChannel>> GetUserTextChannelsAsync(Guid userGuid)
     {
         var user = await _databaseContext.Users
-            .Include(x => x.TextChannels)
-            .FirstAsync(x => x.Guid == userGuid);
+            .Include(user => user.TextChannels)
+            .FirstAsync(user => user.Guid == userGuid);
 
-        return user.TextChannels;
+        var textChannels = user.TextChannels;
+
+        return textChannels;
+    }
+
+    public async Task<User> GetUserAsync(ClaimsPrincipal claimsPrincipal)
+    {
+        var claim = claimsPrincipal.FindFirst(u => u.Type == ClaimTypes.NameIdentifier);
+        var userEntity = await GetUserAsync(int.Parse(claim.Value));
+        return userEntity;
     }
 }

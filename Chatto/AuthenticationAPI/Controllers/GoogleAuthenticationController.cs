@@ -33,7 +33,7 @@ public class GoogleAuthenticationController : Controller
         return await LoginGoogle();
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("LoginGoogle")]
     public async Task<IActionResult> LoginGoogle()
     {

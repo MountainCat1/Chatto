@@ -11,29 +11,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Configuration;
+using Shared.Extensions;
 using Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = builder.Configuration;
+ConfigurationManager configuration = builder.Configuration;
 var services = builder.Services;
 // ========= CONFIGURATION  =========
 
 
-configuration.AddJsonFile("microservicesSettings.json");
-var microservicesSettings = new MicroservicesSettings();
-configuration.GetSection("MicroservicesSettings").Bind(microservicesSettings);
-services.AddSingleton(microservicesSettings);
+var microservicesSettings =
+    configuration.AddConfigurationFile<MicroservicesSettings>("microservicesSettings.json",
+        "MicroservicesSettings", services);
 
-configuration.AddJsonFile("Secrets/Authentication.json");
-var authenticationSettings = new AuthenticationSettings();
-configuration.GetSection("AuthenticationSettings").Bind(authenticationSettings);
-services.AddSingleton(authenticationSettings);
+var authenticationSettings =
+    configuration.AddConfigurationFile<AuthenticationSettings>("Secrets/Authentication.json",
+        "AuthenticationSettings", services);
 
-configuration.AddJsonFile("Secrets/SecuritySettings.json");
-var securitySettings = new MicroserviceSecuritySettings();
-configuration.GetSection("SecuritySettings").Bind(securitySettings);
-services.AddSingleton(securitySettings);
+var securitySettings =
+    configuration.AddConfigurationFile<MicroserviceSecuritySettings>("Secrets/SecuritySettings.json",
+        "SecuritySettings", services);
 
 // ======== SERVICES
 
@@ -61,6 +59,10 @@ services.AddAuthentication(option =>
 });
 services.AddAuthorization(options =>
 {
+    options.AddPolicy(
+        "Authenticated", 
+        policy => policy.RequireAuthenticatedUser());
+    
     options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 });
 
@@ -80,9 +82,11 @@ services.AddDbContext<DatabaseContext>((options) =>
 });
 
 services.AddSwaggerGen();
-
+services.AddAutoMapper(typeof(Program).Assembly);
+services.AddLogging();
 
 services.AddScoped<IMicroserviceAuthenticationService, MicroserviceAuthenticationService>();
+
 
 services.AddHttpClient<IAuthenticationClient, AuthenticationClient>(client =>
 {

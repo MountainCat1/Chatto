@@ -1,14 +1,18 @@
 ﻿using System.Net.Mime;
+using AutoMapper;
 using Chatto.Infrastructure;
+using Chatto.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.Models;
 
 namespace Chatto.Services;
 
 public interface ITextChannelService
 {
-    Task CreatNewTextChannel(TextChannel textChannel);
+    Task CreatNewTextChannel(TextChannelModel model, Guid memberGuid);
     Task AddMessage(Guid textChannelGuid, Guid messageGuid);
     Task<ICollection<Message>> GetMessages(Guid textChannelGuid);
+    Task<TextChannel> GetTextChannel(Guid textChannelGuid);
 }
 
 public class TextChannelService : ITextChannelService
@@ -16,24 +20,34 @@ public class TextChannelService : ITextChannelService
     private readonly DatabaseContext _databaseContext;
     private readonly ILogger<ITextChannelService> _logger;
     private readonly IGuidClient _guidClient;
+    private readonly IUserService _userService;
+
+    private readonly IMapper _mapper;
 
     public TextChannelService(
         DatabaseContext databaseContext, 
         ILogger<ITextChannelService> logger, 
-        IGuidClient guidClient)
+        IGuidClient guidClient, IMapper mapper, IUserService userService)
     {
         _databaseContext = databaseContext;
         _logger = logger;
         _guidClient = guidClient;
+        _mapper = mapper;
+        _userService = userService;
     }
 
-    public async Task CreatNewTextChannel(TextChannel textChannel)
+    public async Task CreatNewTextChannel(TextChannelModel model, Guid memberGuid)
     {
-        textChannel.Guid = await _guidClient.GetGuidAsync();
+        var textChannelEntity = _mapper.Map<TextChannel>(model);
+        var userMember = await _userService.GetUserAsync(memberGuid);
+
+        textChannelEntity.Users = new List<User>{userMember};
+        textChannelEntity.Guid = await _guidClient.GetGuidAsync();
         
-        await _databaseContext.TextChannels.AddAsync(textChannel);
+        await _databaseContext.TextChannels.AddAsync(textChannelEntity);
         
-        _logger.LogInformation($"Creating text channel ({textChannel.Guid})");
+        _logger.LogInformation(
+            $"Creating text channel ({textChannelEntity.ChannelType.ToString()},{textChannelEntity.Guid})");
         await _databaseContext.SaveChangesAsync();
     }
     
@@ -52,6 +66,12 @@ public class TextChannelService : ITextChannelService
 
     public async Task<ICollection<Message>> GetMessages(Guid textChannelGuid)
     {
-        return (await _databaseContext.TextChannels.FindAsync(textChannelGuid)).Messages;
+        var textChannel = await _databaseContext.TextChannels.FindAsync(textChannelGuid);
+        return textChannel.Messages;
+    }
+
+    public async Task<TextChannel> GetTextChannel(Guid textChannelGuid)
+    {
+        return await _databaseContext.TextChannels.FindAsync(textChannelGuid);
     }
 }
