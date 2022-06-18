@@ -43,4 +43,18 @@ public class TextChannelController : Controller
         
         return Ok();
     }
+
+    [Authorize(Policy = "Authenticated")]
+    [HttpPost("{textChannelGuid}/Send")]
+    public async Task<IActionResult> SendMessage(
+        [FromRoute] Guid textChannelGuid, 
+        [FromBody] SendMessageModel sendMessageModel)
+    {
+        var presentUser = await _userService.GetUserAsync(User);
+
+        var message =
+            await _textChannelService.SendMessageToChannel(textChannelGuid, sendMessageModel, presentUser.Guid);
+        
+        return Ok(message);
+    }
 }

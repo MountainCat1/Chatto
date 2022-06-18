@@ -11,5 +11,11 @@ public class AutoMapperSettings : Profile
     {
         CreateMap<TextChannelModel, TextChannel>();
         CreateMap<TextChannel, TextChannelModel>();
+
+        CreateMap<SendMessageModel, Message>();
+        CreateMap<Message, SendMessageModel>();
+        
+        CreateMap<Message, MessageModel>();
+        CreateMap<MessageModel, Message>();
     }
 }

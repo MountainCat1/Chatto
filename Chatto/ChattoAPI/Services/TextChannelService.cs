@@ -2,6 +2,7 @@
 using AutoMapper;
 using Chatto.Infrastructure;
 using Chatto.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 
@@ -13,6 +14,7 @@ public interface ITextChannelService
     Task AddMessage(Guid textChannelGuid, Guid messageGuid);
     Task<ICollection<Message>> GetMessages(Guid textChannelGuid);
     Task<TextChannel> GetTextChannel(Guid textChannelGuid);
+    Task<MessageModel> SendMessageToChannel(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid);
 }
 
 public class TextChannelService : ITextChannelService
@@ -72,6 +74,26 @@ public class TextChannelService : ITextChannelService
 
     public async Task<TextChannel> GetTextChannel(Guid textChannelGuid)
     {
-        return await _databaseContext.TextChannels.FindAsync(textChannelGuid);
+        return await _databaseContext.TextChannels
+            .Include(channel => channel.Messages)
+            .FirstAsync(channel => channel.Guid == textChannelGuid);
+    }
+
+    public async Task<MessageModel> SendMessageToChannel(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid)
+    {
+        var textChannel = await GetTextChannel(textChannelGuid);
+        var messageEntity = _mapper.Map<Message>(sendMessageModel);
+        var authorUser = await _userService.GetUserAsync(authorUserGuid);
+        var messageGuid = await _guidClient.GetGuidAsync();
+        
+        messageEntity.Author = authorUser;
+        messageEntity.Guid = messageGuid;
+        messageEntity.Time = DateTime.Now;
+
+        await _databaseContext.Messages.AddAsync(messageEntity);
+        textChannel.Messages.Add(messageEntity);
+        await _databaseContext.SaveChangesAsync();
+
+        return _mapper.Map<MessageModel>(messageEntity);
     }
 }
