@@ -52,7 +52,7 @@ public class UserController : Controller
     [AllowAnonymous]
     [HttpGet]
     [Route("IsApiAlive")]
-    public async Task<IActionResult> AutorizationCheck()
+    public async Task<IActionResult> AuthorizationCheck()
     {
         return Ok("YES!");
     }
