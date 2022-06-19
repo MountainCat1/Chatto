@@ -14,18 +14,24 @@ public class TextChannelController : Controller
 {
     private readonly ITextChannelService _textChannelService;
     private readonly IUserService _userService;
+    private readonly IAuthorizationService _authorizationService;
 
     private readonly IMapper _mapper;
 
-    public TextChannelController(ITextChannelService textChannelService, IUserService userService, IMapper mapper)
+    public TextChannelController(
+        ITextChannelService textChannelService, 
+        IUserService userService, 
+        IMapper mapper, 
+        IAuthorizationService authorizationService)
     {
         _textChannelService = textChannelService;
         _userService = userService;
         _mapper = mapper;
+        _authorizationService = authorizationService;
     }
 
-    [Authorize(Policy = "Authenticated")]
     [HttpGet("List")]
+    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
     public async Task<IActionResult> List()
     {
         var presentUser = await _userService.GetUserAsync(User);
@@ -33,7 +39,7 @@ public class TextChannelController : Controller
         return Ok(textChannels);
     }
     
-    [Authorize(Policy = "Authenticated")]
+    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
     [HttpPost("Create")]
     public async Task<IActionResult> Create([FromBody] TextChannelModel textChannelModel)
     {
@@ -44,7 +50,7 @@ public class TextChannelController : Controller
         return Ok();
     }
 
-    [Authorize(Policy = "Authenticated")]
+    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
     [HttpPost("{textChannelGuid}/Send")]
     public async Task<IActionResult> SendMessage(
         [FromRoute] Guid textChannelGuid, 
@@ -52,6 +58,10 @@ public class TextChannelController : Controller
     {
         var presentUser = await _userService.GetUserAsync(User);
 
+        var textChannel = await _textChannelService.GetUsers(textChannelGuid);
+
+        await _authorizationService.AuthorizeAsync(User, textChannel, Operations.SendMessage);
+        
         var message =
             await _textChannelService.SendMessageToChannel(textChannelGuid, sendMessageModel, presentUser.Guid);
         

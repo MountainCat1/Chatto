@@ -1,5 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Chatto;
+using Chatto.AuthorizationHandlers;
 using Chatto.Configuration;
 using Chatto.Controllers;
 using Chatto.Infrastructure;
@@ -59,12 +61,21 @@ services.AddAuthentication(option =>
 });
 services.AddAuthorization(options =>
 {
-    options.AddPolicy(
-        "Authenticated", 
-        policy => policy.RequireAuthenticatedUser());
+    options.AddPolicy(AuthorizationPolicies.Authenticated, policy => policy
+        .RequireAuthenticatedUser());
     
     options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    
+    options.AddPolicy(Operations.SendMessage, policy => policy
+        .RequireAuthenticatedUser()
+        .Requirements.Add(new IsAMemberRequirement()));
+    
+    options.AddPolicy(Operations.View, policy => policy
+        .RequireAuthenticatedUser()
+        .Requirements.Add(new IsAMemberRequirement()));
 });
+services.AddSingleton<IAuthorizationHandler, TextChannelAuthorizationHandler>();
+
 
 services.AddCors(options =>
 {

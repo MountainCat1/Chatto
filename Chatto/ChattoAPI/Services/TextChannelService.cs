@@ -13,7 +13,8 @@ public interface ITextChannelService
     Task CreatNewTextChannel(TextChannelModel model, Guid memberGuid);
     Task AddMessage(Guid textChannelGuid, Guid messageGuid);
     Task<ICollection<Message>> GetMessages(Guid textChannelGuid);
-    Task<TextChannel> GetTextChannel(Guid textChannelGuid);
+    Task<TextChannel> GetTextChannelAsync(Guid textChannelGuid);
+    Task<TextChannel> GetUsers(Guid textChannelGuid);
     Task<MessageModel> SendMessageToChannel(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid);
 }
 
@@ -72,16 +73,23 @@ public class TextChannelService : ITextChannelService
         return textChannel.Messages;
     }
 
-    public async Task<TextChannel> GetTextChannel(Guid textChannelGuid)
+    public async Task<TextChannel> GetTextChannelAsync(Guid textChannelGuid)
     {
         return await _databaseContext.TextChannels
             .Include(channel => channel.Messages)
             .FirstAsync(channel => channel.Guid == textChannelGuid);
     }
 
+    public async Task<TextChannel> GetUsers(Guid textChannelGuid)
+    {
+        return _databaseContext.TextChannels
+            .Include(channel => channel.Users)
+            .First(channel => channel.Guid == textChannelGuid);
+    }
+
     public async Task<MessageModel> SendMessageToChannel(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid)
     {
-        var textChannel = await GetTextChannel(textChannelGuid);
+        var textChannel = await GetTextChannelAsync(textChannelGuid);
         var messageEntity = _mapper.Map<Message>(sendMessageModel);
         var authorUser = await _userService.GetUserAsync(authorUserGuid);
         var messageGuid = await _guidClient.GetGuidAsync();
