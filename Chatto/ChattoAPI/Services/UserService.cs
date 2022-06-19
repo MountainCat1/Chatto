@@ -10,7 +10,6 @@ public interface IUserService
     Task<User> GetUserAsync(int accountId);
     Task<User> GetUserAsync(Guid guid);
     Task<IList<TextChannel>> GetUserTextChannelsAsync(Guid userGuid);
-
 }
 
 public class UserService : IUserService

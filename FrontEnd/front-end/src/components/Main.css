@@ -1,0 +1,61 @@
+.main-panel {
+    height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.parent {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-rows: 1fr 7fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  height: 100%;
+
+}
+.parent > * {
+    padding: 1rem;
+
+}
+.padding-around-panel {
+    padding: 2rem;
+    height: max(min(50rem, 100vh), 10rem);
+    display: block;
+}
+
+
+.center {
+  grid-area: 2 / 2 / 6 / 5;
+  background-color: #343942;
+}
+.left {
+  grid-area: 2 / 1 / 6 / 2;
+  background-color: #282c34;
+}
+.top {
+  grid-area: 1 / 1 / 2 / 6 ;
+  background-color: #21242b;
+}
+/* Landscape phones and down */
+@media (max-width: 480px) {  
+
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {  
+    .padding-around-panel {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+
+ }
+
+/* Large desktop */
+@media (min-width: 1200px) { 
+  
+}

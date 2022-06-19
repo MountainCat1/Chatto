@@ -22,7 +22,7 @@ public class UserController : Controller
     }
 
     [AllowAnonymous]
-    [HttpGet]
+    [HttpPost]
     [Route("LoginGoogle")]
     public async Task<IActionResult> LoginGoogle()
     {

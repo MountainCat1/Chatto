@@ -1,4 +1,5 @@
 import { CodeResponse, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { Cookies } from "react-cookie";
 
 export default function () {
     return (
@@ -49,7 +50,11 @@ function callApiRegister(jwt: string) {
 
     fetch('https://localhost:8000/api/Authentication/RegisterGoogle', requestOptions)
         .then(response => {
-            response.text().then(text => console.log(text))
+            response.text().then(text => {
+                console.log(text);
+                const cookies = new Cookies();
+                cookies.set('Authorization', `${text}`, { path: '/' });
+            })
         })
 }
 
@@ -65,7 +70,11 @@ function callApiLogin(jwt: string) {
 
     fetch('https://localhost:8000/api/Authentication/LoginGoogle', requestOptions)
         .then(response => {
-            response.text().then(text => console.log(text))
+            response.text().then(text => {
+                console.log(text);
+                const cookies = new Cookies();
+                cookies.set('Authorization', `${text}`, { path: '/' });
+            })
         })
 }
 
