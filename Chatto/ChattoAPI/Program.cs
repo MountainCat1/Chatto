@@ -67,11 +67,9 @@ services.AddAuthorization(options =>
     options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     
     options.AddPolicy(Operations.SendMessage, policy => policy
-        .RequireAuthenticatedUser()
         .Requirements.Add(new IsAMemberRequirement()));
     
     options.AddPolicy(Operations.View, policy => policy
-        .RequireAuthenticatedUser()
         .Requirements.Add(new IsAMemberRequirement()));
 });
 services.AddSingleton<IAuthorizationHandler, TextChannelAuthorizationHandler>();

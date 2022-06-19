@@ -51,13 +51,12 @@ public class TextChannelController : Controller
     }
 
     [Authorize(Policy = AuthorizationPolicies.Authenticated)]
-    [HttpPost("{textChannelGuid}/Send")]
+    [HttpPost("{textChannelGuid}")]
     public async Task<IActionResult> SendMessage(
         [FromRoute] Guid textChannelGuid, 
         [FromBody] SendMessageModel sendMessageModel)
     {
         var presentUser = await _userService.GetUserAsync(User);
-
         var textChannel = await _textChannelService.GetUsers(textChannelGuid);
 
         await _authorizationService.AuthorizeAsync(User, textChannel, Operations.SendMessage);
@@ -66,5 +65,20 @@ public class TextChannelController : Controller
             await _textChannelService.SendMessageToChannel(textChannelGuid, sendMessageModel, presentUser.Guid);
         
         return Ok(message);
+    }
+
+    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
+    [HttpGet("{textChannelGuid:guid}")]
+    public async Task<IActionResult> GetMessages([FromRoute] Guid textChannelGuid)
+    {
+        var textChannel = await _textChannelService.GetUsers(textChannelGuid);
+
+        var authResult = await _authorizationService.AuthorizeAsync(User, textChannel, Operations.View);
+        if (!authResult.Succeeded)
+            return Forbid();
+
+        var messages = await _textChannelService.GetMessages(textChannelGuid);
+
+        return Ok(messages);
     }
 }

@@ -12,7 +12,7 @@ public interface ITextChannelService
 {
     Task CreatNewTextChannel(TextChannelModel model, Guid memberGuid);
     Task AddMessage(Guid textChannelGuid, Guid messageGuid);
-    Task<ICollection<Message>> GetMessages(Guid textChannelGuid);
+    Task<ICollection<MessageModel>> GetMessages(Guid textChannelGuid);
     Task<TextChannel> GetTextChannelAsync(Guid textChannelGuid);
     Task<TextChannel> GetUsers(Guid textChannelGuid);
     Task<MessageModel> SendMessageToChannel(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid);
@@ -67,10 +67,16 @@ public class TextChannelService : ITextChannelService
         await _databaseContext.SaveChangesAsync();
     }
 
-    public async Task<ICollection<Message>> GetMessages(Guid textChannelGuid)
+    public async Task<ICollection<MessageModel>> GetMessages(Guid textChannelGuid)
     {
-        var textChannel = await _databaseContext.TextChannels.FindAsync(textChannelGuid);
-        return textChannel.Messages;
+        var textChannel = await _databaseContext.TextChannels
+            .Include(channel => channel.Messages)
+            .AsNoTracking()
+            .FirstAsync(channel => channel.Guid == textChannelGuid);
+
+        var models = _mapper.Map<List<MessageModel>>(textChannel.Messages);
+        
+        return models;
     }
 
     public async Task<TextChannel> GetTextChannelAsync(Guid textChannelGuid)
