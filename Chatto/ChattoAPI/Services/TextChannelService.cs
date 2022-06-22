@@ -10,12 +10,13 @@ namespace Chatto.Services;
 
 public interface ITextChannelService
 {
-    Task CreatNewTextChannel(TextChannelModel model, Guid memberGuid);
-    Task AddMessage(Guid textChannelGuid, Guid messageGuid);
-    Task<ICollection<MessageModel>> GetMessages(Guid textChannelGuid);
+    Task CreatNewTextChannelAsync(TextChannelModel model, Guid memberGuid);
+    Task AddUserAsync(Guid textChannelGuid, Guid userGuid);
+    Task AddMessageAsync(Guid textChannelGuid, Guid messageGuid);
+    Task<ICollection<MessageModel>> GetMessagesAsync(Guid textChannelGuid);
     Task<TextChannel> GetTextChannelAsync(Guid textChannelGuid);
-    Task<TextChannel> GetUsers(Guid textChannelGuid);
-    Task<MessageModel> SendMessageToChannel(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid);
+    Task<TextChannel> GetUsersAsync(Guid textChannelGuid);
+    Task<MessageModel> SendMessageToChannelAsync(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid);
 }
 
 public class TextChannelService : ITextChannelService
@@ -39,7 +40,7 @@ public class TextChannelService : ITextChannelService
         _userService = userService;
     }
 
-    public async Task CreatNewTextChannel(TextChannelModel model, Guid memberGuid)
+    public async Task CreatNewTextChannelAsync(TextChannelModel model, Guid memberGuid)
     {
         var textChannelEntity = _mapper.Map<TextChannel>(model);
         var userMember = await _userService.GetUserAsync(memberGuid);
@@ -53,8 +54,17 @@ public class TextChannelService : ITextChannelService
             $"Creating text channel ({textChannelEntity.ChannelType.ToString()},{textChannelEntity.Guid})");
         await _databaseContext.SaveChangesAsync();
     }
-    
-    public async Task AddMessage(Guid textChannelGuid, Guid messageGuid)
+
+    public async Task AddUserAsync(Guid textChannelGuid, Guid userGuid)
+    {
+        var textChannel = await GetUsersAsync(textChannelGuid);
+        var user = await _userService.GetUserAsync(userGuid);
+        
+        textChannel.Users.Add(user);
+        await _databaseContext.SaveChangesAsync();
+    }
+
+    public async Task AddMessageAsync(Guid textChannelGuid, Guid messageGuid)
     {
         var textChannel = await _databaseContext.TextChannels
             .Include(x => x.Messages)
@@ -67,7 +77,7 @@ public class TextChannelService : ITextChannelService
         await _databaseContext.SaveChangesAsync();
     }
 
-    public async Task<ICollection<MessageModel>> GetMessages(Guid textChannelGuid)
+    public async Task<ICollection<MessageModel>> GetMessagesAsync(Guid textChannelGuid)
     {
         var textChannel = await _databaseContext.TextChannels
             .Include(channel => channel.Messages)
@@ -86,14 +96,14 @@ public class TextChannelService : ITextChannelService
             .FirstAsync(channel => channel.Guid == textChannelGuid);
     }
 
-    public async Task<TextChannel> GetUsers(Guid textChannelGuid)
+    public async Task<TextChannel> GetUsersAsync(Guid textChannelGuid)
     {
         return _databaseContext.TextChannels
             .Include(channel => channel.Users)
             .First(channel => channel.Guid == textChannelGuid);
     }
 
-    public async Task<MessageModel> SendMessageToChannel(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid)
+    public async Task<MessageModel> SendMessageToChannelAsync(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid)
     {
         var textChannel = await GetTextChannelAsync(textChannelGuid);
         var messageEntity = _mapper.Map<Message>(sendMessageModel);

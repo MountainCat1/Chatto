@@ -110,6 +110,7 @@ services.AddScoped<IAuthenticationService, AuthenticationService>();
 services.AddScoped<DatabaseSeeder>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<ITextChannelService, TextChannelService>();
+services.AddScoped<ITextChannelInviteService, TextChannelInviteService>();
 
 
 // ======== APP

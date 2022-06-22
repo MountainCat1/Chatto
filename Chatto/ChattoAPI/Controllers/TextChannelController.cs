@@ -45,7 +45,7 @@ public class TextChannelController : Controller
     {
         var presentUser = await _userService.GetUserAsync(User);
         
-        await _textChannelService.CreatNewTextChannel(textChannelModel, presentUser.Guid);
+        await _textChannelService.CreatNewTextChannelAsync(textChannelModel, presentUser.Guid);
         
         return Ok();
     }
@@ -57,13 +57,15 @@ public class TextChannelController : Controller
         [FromBody] SendMessageModel sendMessageModel)
     {
         var presentUser = await _userService.GetUserAsync(User);
-        var textChannel = await _textChannelService.GetUsers(textChannelGuid);
-
-        // TODO: this shit is not doing anything wtf?
-        await _authorizationService.AuthorizeAsync(User, textChannel, Operations.SendMessage);
+        var textChannel = await _textChannelService.GetUsersAsync(textChannelGuid);
+     
+        // Authorize
+        var authResult = await _authorizationService.AuthorizeAsync(User, textChannel, Operations.SendMessage);
+        if (!authResult.Succeeded)
+            return Forbid();
         
         var message =
-            await _textChannelService.SendMessageToChannel(textChannelGuid, sendMessageModel, presentUser.Guid);
+            await _textChannelService.SendMessageToChannelAsync(textChannelGuid, sendMessageModel, presentUser.Guid);
         
         return Ok(message);
     }
@@ -72,13 +74,14 @@ public class TextChannelController : Controller
     [HttpGet("{textChannelGuid:guid}")]
     public async Task<IActionResult> GetMessages([FromRoute] Guid textChannelGuid)
     {
-        var textChannel = await _textChannelService.GetUsers(textChannelGuid);
-
+        var textChannel = await _textChannelService.GetUsersAsync(textChannelGuid);
+        
+        // Authorize
         var authResult = await _authorizationService.AuthorizeAsync(User, textChannel, Operations.View);
         if (!authResult.Succeeded)
             return Forbid();
 
-        var messages = await _textChannelService.GetMessages(textChannelGuid);
+        var messages = await _textChannelService.GetMessagesAsync(textChannelGuid);
 
         return Ok(messages);
     }
