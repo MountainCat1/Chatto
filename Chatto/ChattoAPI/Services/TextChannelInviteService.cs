@@ -12,12 +12,10 @@ public interface ITextChannelInviteService
 public class TextChannelInviteService : ITextChannelInviteService
 {
     private readonly DatabaseContext _databaseContext;
-    private readonly IAuthorizationService _authorizationService;
-    
-    public TextChannelInviteService(DatabaseContext databaseContext, IAuthorizationService authorizationService)
+
+    public TextChannelInviteService(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
-        _authorizationService = authorizationService;
     }
 
     public async Task CreateInviteAsync(User author, User target, TextChannel textChannel)
