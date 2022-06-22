@@ -59,6 +59,7 @@ public class TextChannelController : Controller
         var presentUser = await _userService.GetUserAsync(User);
         var textChannel = await _textChannelService.GetUsers(textChannelGuid);
 
+        // TODO: this shit is not doing anything wtf?
         await _authorizationService.AuthorizeAsync(User, textChannel, Operations.SendMessage);
         
         var message =
