@@ -26,7 +26,7 @@ public class TextChannelInviteController : Controller
         _authorizationService = authorizationService;
     }
     
-    // TODO: Now do this!!!
+    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
     [HttpPost("/Create/{channelGuid}/{targetGuid}")]
     public async Task<IActionResult> Create(
         [FromRoute] Guid channelGuid, 

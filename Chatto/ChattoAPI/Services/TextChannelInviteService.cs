@@ -7,7 +7,7 @@ namespace Chatto.Services;
 
 public interface ITextChannelInviteService
 {
-    Task CreateInviteAsync(Guid authorGuid, Guid targetGuid, Guid textChannelGuid)
+    Task CreateInviteAsync(Guid authorGuid, Guid targetGuid, Guid textChannelGuid);
     Task AcceptInviteAsync(Guid inviteGuid);
     Task DeclineInviteAsync(Guid inviteGuid);
     Task<TextChannelInvite> GetInviteAsync(Guid inviteGuid);
@@ -20,15 +20,18 @@ public class TextChannelInviteService : ITextChannelInviteService
     private readonly DatabaseContext _databaseContext;
     private readonly ITextChannelService _textChannelService;
     private readonly IUserService _userService;
+    private readonly ILogger<ITextChannelService> _logger;
 
     public TextChannelInviteService(
         DatabaseContext databaseContext, 
         ITextChannelService textChannelService, 
-        IUserService userService)
+        IUserService userService, 
+        ILogger<ITextChannelService> logger)
     {
         _databaseContext = databaseContext;
         _textChannelService = textChannelService;
         _userService = userService;
+        _logger = logger;
     }
 
     public async Task CreateInviteAsync(Guid authorGuid, Guid targetGuid, Guid textChannelGuid)
@@ -45,12 +48,15 @@ public class TextChannelInviteService : ITextChannelInviteService
         };
 
         _databaseContext.TextChannelInvites.Add(invite);
+        _logger.LogInformation(
+            $"Creating invite (Author: {authorGuid}, Target {targetGuid}, Channel: {textChannelGuid})");
         await _databaseContext.SaveChangesAsync();
     }
 
     public async Task AcceptInviteAsync(Guid inviteGuid)
     {
         var invite = await GetInviteAsync(inviteGuid);
+        _logger.LogInformation($"Invite accepted! ({inviteGuid})");
         await _textChannelService.AddUserAsync(invite.TargetGuid, invite.TextChannelGuid);
     }
 
