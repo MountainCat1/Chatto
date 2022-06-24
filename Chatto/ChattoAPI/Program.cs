@@ -71,6 +71,9 @@ services.AddAuthorization(options =>
     
     options.AddPolicy(Operations.View, policy => policy
         .Requirements.Add(new IsAMemberRequirement()));
+    
+    options.AddPolicy(Operations.InviteNewMembers, policy => policy
+        .Requirements.Add(new IsAMemberRequirement()));
 });
 services.AddSingleton<IAuthorizationHandler, TextChannelAuthorizationHandler>();
 

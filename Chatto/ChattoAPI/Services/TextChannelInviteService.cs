@@ -7,7 +7,7 @@ namespace Chatto.Services;
 
 public interface ITextChannelInviteService
 {
-    Task CreateInviteAsync(User author, User target, TextChannel textChannel);
+    Task CreateInviteAsync(Guid authorGuid, Guid targetGuid, Guid textChannelGuid)
     Task AcceptInviteAsync(Guid inviteGuid);
     Task DeclineInviteAsync(Guid inviteGuid);
     Task<TextChannelInvite> GetInviteAsync(Guid inviteGuid);
@@ -19,15 +19,24 @@ public class TextChannelInviteService : ITextChannelInviteService
 {
     private readonly DatabaseContext _databaseContext;
     private readonly ITextChannelService _textChannelService;
+    private readonly IUserService _userService;
 
-    public TextChannelInviteService(DatabaseContext databaseContext, ITextChannelService textChannelService)
+    public TextChannelInviteService(
+        DatabaseContext databaseContext, 
+        ITextChannelService textChannelService, 
+        IUserService userService)
     {
         _databaseContext = databaseContext;
         _textChannelService = textChannelService;
+        _userService = userService;
     }
 
-    public async Task CreateInviteAsync(User author, User target, TextChannel textChannel)
+    public async Task CreateInviteAsync(Guid authorGuid, Guid targetGuid, Guid textChannelGuid)
     {   
+        var author = await _userService.GetUserAsync(authorGuid);
+        var target = await _userService.GetUserAsync(targetGuid);
+        var textChannel = await _textChannelService.GetTextChannelAsync(textChannelGuid);
+        
         var invite = new TextChannelInvite()
         {
             Author = author,
