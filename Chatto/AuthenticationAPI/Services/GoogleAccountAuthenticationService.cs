@@ -4,6 +4,7 @@ using System.Security.Principal;
 using System.Text;
 using ChattoAuth.Configuration;
 using ChattoAuth.Infrastructure;
+using ChattoAuth.Models;
 using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
@@ -13,12 +14,7 @@ namespace ChattoAuth.Services;
 
 public interface IGoogleAuthenticationService : IAccountAuthenticationService<GoogleAccount, GoogleAuthenticationData>
 {
-    /// <summary>
-    /// Returns GoogleAccountData with google ID taken from google jwt
-    /// </summary>
-    /// <param name="googleJwt"></param>
-    /// <returns></returns>
-    public Task<GoogleAccount> CreateAccountEntityAsync(string googleJwt);
+    // Intentionally empty
 }
 
 public class GoogleAuthenticationService : IGoogleAuthenticationService
@@ -35,14 +31,6 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
         _authenticationSettings = authenticationSettings;
         _databaseContext = databaseContext;
         _logger = logger;
-    }
-    
-    public async Task<GoogleAccount> CreateAccountEntityAsync(string googleJwt)
-    {
-        return new GoogleAccount()
-        {
-            GoogleId = (await ValidateGoogleJwt(googleJwt)).Subject
-        };
     }
 
     /// <summary>
@@ -119,9 +107,4 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
             throw;
         }
     }
-}
-
-public class GoogleAuthenticationData
-{
-    public string Jwt { get; set; }
 }
