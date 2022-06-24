@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ChattoAuth.Models;
 using ChattoAuth.Services;
 using Microsoft.AspNetCore.Mvc;
 
