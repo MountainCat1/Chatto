@@ -44,6 +44,7 @@ public class TextChannelInviteService : ITextChannelInviteService
         {
             Author = author,
             Target = target,
+            //TargetAccountId = target.AccountId,
             TextChannel = textChannel
         };
 

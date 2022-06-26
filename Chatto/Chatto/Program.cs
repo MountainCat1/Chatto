@@ -72,9 +72,12 @@ services.AddAuthorization(options =>
     
     options.AddPolicy(Operations.InviteNewMembers, policy => policy
         .Requirements.Add(new IsAMemberRequirement()));
+    
+    options.AddPolicy(Operations.AcceptInvite, policy => policy
+        .Requirements.Add(new IsTargetRequirement()));
 });
 services.AddSingleton<IAuthorizationHandler, TextChannelAuthorizationHandler>();
-
+services.AddSingleton<IAuthorizationHandler, InviteAuthorizationHandler>();
 
 services.AddCors(options =>
 {

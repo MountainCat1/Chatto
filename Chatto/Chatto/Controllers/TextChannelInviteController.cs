@@ -42,11 +42,32 @@ public class TextChannelInviteController : Controller
         
         return Ok();
     }
-
-    [HttpPost("Accept/{channelGuid}")]
+    
+    [HttpGet("List")]
     [Authorize(Policy = AuthorizationPolicies.Authenticated)]
-    public async Task<IActionResult> Accept()
+    public async Task<IActionResult> List()
     {
+        var user = await _userService.GetUserAsync(User);
+        
+        var invites = await _textChannelInviteService.GetPendingInvitesAsync(user.Guid);
+        
+        return Ok(invites);
+    }
+    
+    [HttpPost("Accept/{inviteGuid}")]
+    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
+    public async Task<IActionResult> Accept([FromRoute] Guid inviteGuid)
+    {
+
+        var invite = await _textChannelInviteService.GetInviteAsync(inviteGuid);
+        
+        // Authorize
+        var authResult = await _authorizationService.AuthorizeAsync(User, invite, Operations.AcceptInvite);
+        if (!authResult.Succeeded)
+            return Forbid();
+        
+        await _textChannelInviteService.AcceptInviteAsync(inviteGuid);
+        
         return Ok();
     }
 
@@ -57,10 +78,5 @@ public class TextChannelInviteController : Controller
         return Ok();
     }
     
-    [HttpGet("List")]
-    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
-    public async Task<IActionResult> List()
-    {
-        return Ok();
-    }
+    
 }
