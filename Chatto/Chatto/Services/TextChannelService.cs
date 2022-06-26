@@ -9,7 +9,7 @@ namespace Chatto.Services;
 
 public interface ITextChannelService
 {
-    Task CreatNewTextChannelAsync(TextChannelModel model, Guid memberGuid);
+    Task<Guid> CreatNewTextChannelAsync(TextChannelModel model, Guid memberGuid);
     Task AddUserAsync(Guid textChannelGuid, Guid userGuid);
     Task AddMessageAsync(Guid textChannelGuid, Guid messageGuid);
     Task<ICollection<MessageModel>> GetMessagesAsync(Guid textChannelGuid);
@@ -39,19 +39,22 @@ public class TextChannelService : ITextChannelService
         _userService = userService;
     }
 
-    public async Task CreatNewTextChannelAsync(TextChannelModel model, Guid memberGuid)
+    public async Task<Guid> CreatNewTextChannelAsync(TextChannelModel model, Guid memberGuid)
     {
         var textChannelEntity = _mapper.Map<TextChannel>(model);
         var userMember = await _userService.GetUserAsync(memberGuid);
-
+        var guid = await _guidClient.GetGuidAsync();
+        
         textChannelEntity.Users = new List<User>{userMember};
-        textChannelEntity.Guid = await _guidClient.GetGuidAsync();
+        textChannelEntity.Guid = guid;
         
         await _databaseContext.TextChannels.AddAsync(textChannelEntity);
         
         _logger.LogInformation(
             $"Creating text channel ({textChannelEntity.ChannelType.ToString()},{textChannelEntity.Guid})");
         await _databaseContext.SaveChangesAsync();
+
+        return guid;
     }
 
     public async Task AddUserAsync(Guid textChannelGuid, Guid userGuid)

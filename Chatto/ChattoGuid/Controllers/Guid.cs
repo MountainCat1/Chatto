@@ -17,7 +17,7 @@ public class GuidController : Controller
     [HttpGet("")]
     public IActionResult Index()
     {
-        var guid = System.Guid.NewGuid().ToString();
+        var guid = Guid.NewGuid().ToString();
         _logger.LogInformation($"Sending new guid... {guid}");
         return Ok(guid);
     }

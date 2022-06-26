@@ -12,7 +12,7 @@ public class GuidClient : IGuidClient
     private readonly HttpClient _httpClient;
     private readonly IMicroserviceAuthenticationService _securityService;
 
-    private const string GetGuidRequestUri = "api/ChattoGuid";
+    private const string GetGuidRequestUri = "api/Guid";
     
     public GuidClient(HttpClient httpClient, IMicroserviceAuthenticationService securityService)
     {

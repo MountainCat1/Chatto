@@ -47,9 +47,9 @@ public class TextChannelController : Controller
     {
         var presentUser = await _userService.GetUserAsync(User);
         
-        await _textChannelService.CreatNewTextChannelAsync(textChannelModel, presentUser.Guid);
+        var textChannelGuid = await _textChannelService.CreatNewTextChannelAsync(textChannelModel, presentUser.Guid);
         
-        return Ok();
+        return Ok(textChannelGuid);
     }
 
     [HttpPost("{textChannelGuid}")]
