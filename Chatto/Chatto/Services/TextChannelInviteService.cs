@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Chatto.Exceptions;
 using Chatto.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ public interface ITextChannelInviteService
     Task<TextChannelInvite> GetInviteAsync(Guid inviteGuid);
     Task<List<TextChannelInvite>> GetPendingInvitesAsync(Guid userGuid);
     Task<List<TextChannelInvite>> GetSentInvitesAsync(Guid userGuid);
+    Task DeleteInviteAsync(Guid inviteGuid);
 }
 
 public class TextChannelInviteService : ITextChannelInviteService
@@ -44,8 +46,8 @@ public class TextChannelInviteService : ITextChannelInviteService
         {
             Author = author,
             Target = target,
-            //TargetAccountId = target.AccountId,
-            TextChannel = textChannel
+            TextChannel = textChannel,
+            TargetAccountId = target.AccountId
         };
 
         _databaseContext.TextChannelInvites.Add(invite);
@@ -57,8 +59,13 @@ public class TextChannelInviteService : ITextChannelInviteService
     public async Task AcceptInviteAsync(Guid inviteGuid)
     {
         var invite = await GetInviteAsync(inviteGuid);
+
+        if (invite == null)
+            throw new NotFoundException("Invite not found");
+        
         _logger.LogInformation($"Invite accepted! ({inviteGuid})");
-        await _textChannelService.AddUserAsync(invite.TargetGuid, invite.TextChannelGuid);
+        await _textChannelService.AddUserAsync(invite.TextChannelGuid, invite.TargetGuid);
+        await DeleteInviteAsync(inviteGuid);
     }
 
     public async Task DeclineInviteAsync(Guid inviteGuid)
@@ -69,7 +76,7 @@ public class TextChannelInviteService : ITextChannelInviteService
     public async Task<TextChannelInvite> GetInviteAsync(Guid inviteGuid)
     {
         return await _databaseContext.TextChannelInvites
-            .FirstAsync(invite => invite.Guid == inviteGuid);
+            .FirstOrDefaultAsync(invite => invite.Guid == inviteGuid);
     }
 
     public async Task<List<TextChannelInvite>> GetPendingInvitesAsync(Guid userGuid)
@@ -84,5 +91,16 @@ public class TextChannelInviteService : ITextChannelInviteService
         return await _databaseContext.TextChannelInvites
             .Where(invite => invite.AuthorGuid == userGuid)
             .ToListAsync();
+    }
+
+    public async Task DeleteInviteAsync(Guid inviteGuid)
+    {
+        var invite = await _databaseContext.TextChannelInvites
+            .FirstOrDefaultAsync(invite => invite.Guid == inviteGuid);
+
+        if (invite == null)
+            throw new NotFoundException("Invite not found");
+
+        _databaseContext.TextChannelInvites.Remove(invite);
     }
 }

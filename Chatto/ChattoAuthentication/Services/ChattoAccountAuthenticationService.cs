@@ -35,7 +35,7 @@ public class ChattoAuthenticationService : IChattoAuthenticationService
         _logger.LogInformation($"Authenticating http request with google...");
         
         request.Headers.TryGetValue("Authorization", out var authorizationHeader);
-        var authorizationHeaderParts = authorizationHeader.ToString().Split(' ');
+        var authorizationHeaderParts = authorizationHeader.ToString().Split('.');
 
         if (authorizationHeaderParts.Length < 2)
             throw new InvalidAuthenticationDataException("Authentication header should have at least 2 parts");

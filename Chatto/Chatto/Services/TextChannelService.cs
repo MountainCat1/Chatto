@@ -61,7 +61,7 @@ public class TextChannelService : ITextChannelService
     {
         var textChannel = await GetUsersAsync(textChannelGuid);
         var user = await _userService.GetUserAsync(userGuid);
-        
+
         textChannel.Users.Add(user);
         await _databaseContext.SaveChangesAsync();
     }
@@ -100,9 +100,9 @@ public class TextChannelService : ITextChannelService
 
     public async Task<TextChannel> GetUsersAsync(Guid textChannelGuid)
     {
-        return _databaseContext.TextChannels
+        return await _databaseContext.TextChannels
             .Include(channel => channel.Users)
-            .First(channel => channel.Guid == textChannelGuid);
+            .FirstOrDefaultAsync(channel => channel.Guid == textChannelGuid);
     }
 
     public async Task<MessageModel> SendMessageToChannelAsync(Guid textChannelGuid, SendMessageModel sendMessageModel, Guid authorUserGuid)

@@ -1,4 +1,5 @@
-﻿using Chatto.Services;
+﻿using Chatto.Models;
+using Chatto.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,19 +27,22 @@ public class TextChannelInviteController : Controller
         _authorizationService = authorizationService;
     }
     
+
+    [HttpPost("Create")]
     [Authorize(Policy = AuthorizationPolicies.Authenticated)]
-    [HttpPost("/Create/{channelGuid}/{targetGuid}")]
-    public async Task<IActionResult> Create(
-        [FromRoute] Guid channelGuid, 
-        [FromRoute] Guid targetGuid)
+    public async Task<IActionResult> Create([FromBody] TextChannelInviteModel inviteModel)
     {
         var authorUser = await _userService.GetUserAsync(User);
+        var channel = await _textChannelService.GetUsersAsync(inviteModel.TextChannelGuid);
         
-        var authResult = await _authorizationService.AuthorizeAsync(User, Operations.InviteNewMembers);
+        var authResult = await _authorizationService.AuthorizeAsync(User, channel, Operations.InviteNewMembers);
         if (!authResult.Succeeded)
             return Forbid();
         
-        await _textChannelInviteService.CreateInviteAsync(authorUser.Guid, targetGuid, channelGuid);
+        await _textChannelInviteService.CreateInviteAsync(
+            authorUser.Guid, 
+            inviteModel.TargetUserGuid, 
+            inviteModel.TextChannelGuid);
         
         return Ok();
     }

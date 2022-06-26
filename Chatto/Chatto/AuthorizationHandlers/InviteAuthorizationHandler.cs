@@ -15,7 +15,7 @@ public class InviteAuthorizationHandler : AuthorizationHandler<IsTargetRequireme
 
         var claim = context.User.FindFirst(u => u.Type == ClaimTypes.NameIdentifier);
         
-        //if(resource.TargetAccountId == int.Parse(claim.Value))
+        if(resource.TargetAccountId == int.Parse(claim.Value))
         {
             context.Succeed(requirement);
         }

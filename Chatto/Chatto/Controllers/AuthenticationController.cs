@@ -45,24 +45,29 @@ public class UserController : Controller
     [Route("RegisterChatto")]
     public async Task<IActionResult> RegisterChatto([FromBody] ChattoRegisterModel registerModel)
     {
-        throw new NotImplementedException();
+        var token = await _authenticationService.RegisterUserChatto(registerModel);
+
+        return Ok(token);
     }
     
     [AllowAnonymous]
     [HttpPost]
     [Route("LoginChatto")]
-    public async Task<IActionResult> LoginChatto([FromBody] ChattoRegisterModel registerModel)
+    public async Task<IActionResult> LoginChatto()
     {
-        throw new NotImplementedException();
+        return Ok(await _authenticationService.LoginUserChatto(Request));
     }
     
-    [Authorize]
+    [Authorize(Policy = AuthorizationPolicies.Authenticated)]
     [HttpGet]
     [Route("WhoAmI")]
     public async Task<IActionResult> WhoAmI()
     {
         var claim = User.FindFirst(u => u.Type == ClaimTypes.NameIdentifier);
         var userEntity = await _userService.GetUserAsync(int.Parse(claim.Value));
+
+        if (userEntity == null)
+            return NotFound("No user found");
         
         return Ok($"{userEntity.Username} {userEntity.Guid}");
     }

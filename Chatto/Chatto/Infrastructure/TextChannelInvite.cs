@@ -11,7 +11,7 @@ public class TextChannelInvite
     [ForeignKey(nameof(Author))] public Guid AuthorGuid { get; set; }
     public User Target { get; set; }
     [ForeignKey(nameof(Target))] public Guid TargetGuid { get; set; }
-    //public int TargetAccountId { get; set; }
+    public int TargetAccountId { get; set; }
     public TextChannel TextChannel { get; set; }
     [ForeignKey(nameof(TextChannel))] public Guid TextChannelGuid { get; set; }
 }
