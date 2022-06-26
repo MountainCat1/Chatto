@@ -1,13 +1,12 @@
-﻿/*using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
-using Microsoft.IdentityModel.JsonWebTokens;
+using Chatto.Configuration;
+using Chatto.Exceptions;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Configuration;
-using Shared.Exceptions;
 
-namespace Shared.Services;
+namespace Chatto.Services;
 
 public interface IMicroserviceAuthenticationService
 {
@@ -68,4 +67,4 @@ public class MicroserviceAuthenticationService : IMicroserviceAuthenticationServ
 
         return true;
     }
-}*/
+}

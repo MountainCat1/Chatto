@@ -1,14 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChattoAPI", "ChattoAPI\ChattoAPI.csproj", "{EC89E6D6-A566-4F51-8286-349C07679A86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatto", "Chatto\Chatto.csproj", "{EC89E6D6-A566-4F51-8286-349C07679A86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationAPI", "AuthenticationAPI\AuthenticationAPI.csproj", "{2514902C-EEA1-431D-BEC1-251423D54D54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication", "Authentication\Authentication.csproj", "{2514902C-EEA1-431D-BEC1-251423D54D54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuidAPI", "GuidAPI\GuidAPI.csproj", "{48E303C1-D458-4821-AA71-E88CB814D58D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunicationAPI", "CommunicationAPI\CommunicationAPI.csproj", "{56DAA754-69E2-4F07-ADCB-0661F9C1EE7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChattoGuid", "ChattoGuid\ChattoGuid.csproj", "{48E303C1-D458-4821-AA71-E88CB814D58D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,17 +20,9 @@ Global
 		{2514902C-EEA1-431D-BEC1-251423D54D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2514902C-EEA1-431D-BEC1-251423D54D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2514902C-EEA1-431D-BEC1-251423D54D54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CE002A9-D3CE-48D0-A4BE-E3E462A1B958}.Release|Any CPU.Build.0 = Release|Any CPU
 		{48E303C1-D458-4821-AA71-E88CB814D58D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48E303C1-D458-4821-AA71-E88CB814D58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48E303C1-D458-4821-AA71-E88CB814D58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48E303C1-D458-4821-AA71-E88CB814D58D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56DAA754-69E2-4F07-ADCB-0661F9C1EE7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56DAA754-69E2-4F07-ADCB-0661F9C1EE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56DAA754-69E2-4F07-ADCB-0661F9C1EE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56DAA754-69E2-4F07-ADCB-0661F9C1EE7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
