@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatto", "Chatto\Chatto.csproj", "{EC89E6D6-A566-4F51-8286-349C07679A86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication", "Authentication\Authentication.csproj", "{2514902C-EEA1-431D-BEC1-251423D54D54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChattoAuthentication", "ChattoAuthentication\ChattoAuthentication.csproj", "{2514902C-EEA1-431D-BEC1-251423D54D54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChattoGuid", "ChattoGuid\ChattoGuid.csproj", "{48E303C1-D458-4821-AA71-E88CB814D58D}"
 EndProject
