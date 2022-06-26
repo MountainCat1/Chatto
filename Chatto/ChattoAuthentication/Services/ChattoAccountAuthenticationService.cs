@@ -11,18 +11,19 @@ namespace ChattoAuth.Services;
 public interface IChattoAuthenticationService : IAccountAuthenticationService<ChattoAccount, ChattoAccountAuthenticationDataModel>
 {
     // Intentionally empty
+    Task<ChattoAccount> AuthenticateAsync(int accountId, string password);
 }
 
 public class ChattoAuthenticationService : IChattoAuthenticationService
 {
     private readonly ILogger<IChattoAuthenticationService> _logger;
     private readonly DatabaseContext _databaseContext;
-    private readonly PasswordHasher<ChattoAccount> _passwordHasher;
+    private readonly IPasswordHasher<ChattoAccount> _passwordHasher;
 
     public ChattoAuthenticationService(
         ILogger<IChattoAuthenticationService> logger,
         DatabaseContext databaseContext, 
-        PasswordHasher<ChattoAccount> passwordHasher)
+        IPasswordHasher<ChattoAccount> passwordHasher)
     {
         _logger = logger;
         _databaseContext = databaseContext;
@@ -36,11 +37,18 @@ public class ChattoAuthenticationService : IChattoAuthenticationService
         request.Headers.TryGetValue("Authorization", out var authorizationHeader);
         var authorizationHeaderParts = authorizationHeader.ToString().Split(' ');
 
-        if (authorizationHeader.Count < 2)
+        if (authorizationHeaderParts.Length < 2)
             throw new InvalidAuthenticationDataException("Authentication header should have at least 2 parts");
         if(!int.TryParse(authorizationHeaderParts[0], out int accountId))
             throw new InvalidAuthenticationDataException("First part must be an integer");
         
+        var password = authorizationHeaderParts[1];
+
+        return await AuthenticateAsync(accountId, password);
+    }
+
+    public async Task<ChattoAccount> AuthenticateAsync(int accountId, string password)
+    {
         var account = await _databaseContext.Accounts
             .OfType<ChattoAccount>()
             .FirstOrDefaultAsync(x => x.Id == accountId);
@@ -48,8 +56,7 @@ public class ChattoAuthenticationService : IChattoAuthenticationService
         if(account == null)
             throw new InvalidAuthenticationDataException("Invalid account ID");
 
-        var password = authorizationHeader[1];
-
+        
         var verificationResult = _passwordHasher.VerifyHashedPassword(
             account, 
             account.PasswordHash, 
@@ -62,8 +69,9 @@ public class ChattoAuthenticationService : IChattoAuthenticationService
         
         return account;
     }
-
-    public async Task RegisterAsync(ChattoAccountAuthenticationDataModel authenticationData)
+    
+    public async Task<ChattoAccountAuthenticationDataModel> RegisterAsync(
+        ChattoAccountAuthenticationDataModel authenticationData)
     {
         _logger.LogInformation($"Registering chatto account...");
 
@@ -71,8 +79,11 @@ public class ChattoAuthenticationService : IChattoAuthenticationService
         var passwordHash = _passwordHasher.HashPassword(newAccount, authenticationData.Password);
         newAccount.PasswordHash = passwordHash;
         
-
         _databaseContext.Accounts.Add(newAccount);
         await _databaseContext.SaveChangesAsync();
+
+        authenticationData.AccountId = newAccount.Id;
+        
+        return authenticationData;
     }
 }

@@ -11,6 +11,8 @@ public interface IAuthenticationService
 {
     Task<string> LoginUserGoogle(HttpRequest request);
     Task<string> RegisterUserGoogle(GoogleRegisterModel registerModel);
+    Task<string> RegisterUserChatto(ChattoRegisterModel registerModel);
+    Task<string> LoginUserChatto(HttpRequest request);
 }
 
 public class AuthenticationService : IAuthenticationService
@@ -63,5 +65,15 @@ public class AuthenticationService : IAuthenticationService
         await _databaseContext.SaveChangesAsync();
         
         return tokenString;
+    }
+
+    public async Task<string> RegisterUserChatto(ChattoRegisterModel registerModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<string> LoginUserChatto(HttpRequest request)
+    {
+        throw new NotImplementedException();
     }
 }

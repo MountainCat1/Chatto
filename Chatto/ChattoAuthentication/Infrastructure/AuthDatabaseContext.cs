@@ -15,6 +15,7 @@ public class DatabaseContext : DbContext
         
         modelBuilder.Entity<Account>()
             .HasDiscriminator<string>("AccountType")
-            .HasValue<GoogleAccount>("GoogleId");
+            .HasValue<GoogleAccount>("Google")
+            .HasValue<ChattoAccount>("Chatto");
     }
 }

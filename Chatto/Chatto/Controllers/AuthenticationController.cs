@@ -40,6 +40,22 @@ public class UserController : Controller
         return Ok(tokenString);
     }
     
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("RegisterChatto")]
+    public async Task<IActionResult> RegisterChatto([FromBody] ChattoRegisterModel registerModel)
+    {
+        throw new NotImplementedException();
+    }
+    
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("LoginChatto")]
+    public async Task<IActionResult> LoginChatto([FromBody] ChattoRegisterModel registerModel)
+    {
+        throw new NotImplementedException();
+    }
+    
     [Authorize]
     [HttpGet]
     [Route("WhoAmI")]

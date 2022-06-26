@@ -6,6 +6,7 @@ using ChattoAuth.Services;
 using ChattoAuth.Validators;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 // ========= BUILDER  =========
@@ -45,10 +46,12 @@ services.AddDbContext<DatabaseContext>(
 services.AddSwaggerGen();
 services.AddAutoMapper(typeof(Program).Assembly);
 services.AddLogging();
+services.AddScoped<IPasswordHasher<ChattoAccount>, PasswordHasher<ChattoAccount>>();
 
 services.AddSingleton<AuthenticationSettings>(authenticationSettings);
 services.AddScoped<IAccountService, AccountService>();
 services.AddScoped<IGoogleAuthenticationService, GoogleAuthenticationService>();
+services.AddScoped<IChattoAuthenticationService, ChattoAuthenticationService>();
 
 
 

@@ -55,7 +55,7 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
         return account;
     }
 
-    public async Task RegisterAsync(GoogleAuthenticationData authenticationData)
+    public async Task<GoogleAuthenticationData> RegisterAsync(GoogleAuthenticationData authenticationData)
     {
         _logger.LogInformation($"Registering account... {authenticationData.Jwt}");
 
@@ -67,7 +67,7 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
                 .OfType<GoogleAccount>()
                 .AnyAsync(x => x.GoogleId == googleId))
         {
-            return;
+            return null;
         }
         
         var newAccount = new GoogleAccount()
@@ -79,6 +79,7 @@ public class GoogleAuthenticationService : IGoogleAuthenticationService
         await _databaseContext.SaveChangesAsync();
         
         _logger.LogInformation($"Account registered!");
+        return authenticationData;
     }
 
     /// <summary>
