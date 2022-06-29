@@ -62,7 +62,6 @@ public class TextChannelInviteController : Controller
     [Authorize(Policy = AuthorizationPolicies.Authenticated)]
     public async Task<IActionResult> Accept([FromRoute] Guid inviteGuid)
     {
-
         var invite = await _textChannelInviteService.GetInviteAsync(inviteGuid);
         
         // Authorize
@@ -77,10 +76,17 @@ public class TextChannelInviteController : Controller
 
     [HttpPost("Decline/{channelGuid}")]
     [Authorize(Policy = AuthorizationPolicies.Authenticated)]
-    public async Task<IActionResult> Decline()
+    public async Task<IActionResult> Decline([FromRoute] Guid inviteGuid)
     {
+        var invite = await _textChannelInviteService.GetInviteAsync(inviteGuid);
+        
+        // Authorize
+        var authResult = await _authorizationService.AuthorizeAsync(User, invite, Operations.AcceptInvite);
+        if (!authResult.Succeeded)
+            return Forbid();
+
+        await _textChannelInviteService.DeclineInviteAsync(inviteGuid);
+        
         return Ok();
     }
-    
-    
 }

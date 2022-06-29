@@ -70,7 +70,14 @@ public class TextChannelInviteService : ITextChannelInviteService
 
     public async Task DeclineInviteAsync(Guid inviteGuid)
     {
-        throw new NotImplementedException();
+        var invite = await GetInviteAsync(inviteGuid);
+
+        if (invite == null)
+            throw new NotFoundException("Invite not found");
+        
+        _logger.LogInformation($"Invite decline! ({inviteGuid})");
+
+        await DeleteInviteAsync(inviteGuid);
     }
 
     public async Task<TextChannelInvite> GetInviteAsync(Guid inviteGuid)
