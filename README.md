@@ -1,5 +1,5 @@
 # **Chatto**
-##### _Simple texting web application as a monolith supported by microservices_
+##### _Simple texting monolith web application supported by some microservices_
 ------------------------
 
 
