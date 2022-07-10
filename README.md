@@ -1,5 +1,5 @@
 # **Chatto**
-##### _Simple texting monolith web application supported by some microservices_
+##### _Simple texting web application as a monolith supported by microservices_
 ------------------------
 
 
@@ -28,7 +28,16 @@ College project with a goal of making funcional API for text application Chatto.
 * Get new guid
 ##### Notes
 * All guids are generated on a separate Guid microservice
-
+## Presentation
+To present how Chatto is performing `Chatto.postman_collection.json` file was added to repository.
+#### Notes
+* To use any endpoint that requires authentication JWT token should be added to header
+`{"Authorization": "Bearer <JWT token>" }`
+* To check to whom JWT token belongs please use endpoint `/api/Authentication/WhoAmI`. 
+If token is invalid `401 Unauthorized` will be returned.
+* Using `/api/Authentication/LoginChatto"` is a specific case in which login data should be send not in body, but in header like this:
+`{"Authorization": "<Username>.<Password>"}`
+* To see how Google Authentication works please open React App `FrontEnd/front-end` in Visual Studio Code and run `npm start` command in terminal. You need to have Node.js installed. After that go to `localhost:3000/registration` and click `Login with google` button. After succesful authentication with google JWT token will be displayed in browser's console. For this to work Back-End of the application needs to be running on the same machine.
 
 ## Front-End
 Project also contains not finished front-end application made in React using typescript. The purpose is to show how google authentication cold look like and work on client's side.
