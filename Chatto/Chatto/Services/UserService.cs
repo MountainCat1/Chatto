@@ -70,7 +70,7 @@ public class UserService : IUserService
 
     public async Task<User> CreateUserAsync(string username, int accountId)
     {
-        if (_databaseContext.Users.Any(u => u.Username == username))
+        if (await _databaseContext.Users.AnyAsync(u => u.Username == username))
             throw new ArgumentException($"There already exists user with username: {username}");
         
         var newUser = new User()
